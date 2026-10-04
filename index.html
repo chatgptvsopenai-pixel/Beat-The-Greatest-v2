@@ -1,0 +1,3401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Beat the Greatest</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #070b10;
+  --panel: #111720;
+  --panel2: #171e28;
+  --border: #293443;
+  --text: #f5f7fa;
+  --muted: #8d99a8;
+  --muted2: #687585;
+  --white: #ffffff;
+  --accent: #dce4ed;
+  --success: #9ee6bd;
+  --danger: #f19a9a;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at top, #17202c 0, #070b10 42%);
+  color: var(--text);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+button,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.app {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 14px;
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.header {
+  text-align: center;
+  padding: 8px 4px 18px;
+}
+
+.title {
+  font-size: 31px;
+  line-height: 1;
+  font-weight: 950;
+  letter-spacing: .7px;
+}
+
+.subtitle {
+  margin-top: 7px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* =========================================================
+   GLOBAL CARDS
+========================================================= */
+
+.card {
+  background:
+    linear-gradient(
+      145deg,
+      rgba(28,36,47,.96),
+      rgba(14,19,26,.98)
+    );
+
+  border: 1px solid var(--border);
+  border-radius: 19px;
+
+  box-shadow:
+    0 14px 35px rgba(0,0,0,.28);
+
+  margin-bottom: 14px;
+}
+
+/* =========================================================
+   CHALLENGE
+========================================================= */
+
+.challenge {
+  padding: 17px;
+}
+
+.challenge-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.challenge-label {
+  color: var(--muted);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.7px;
+  font-weight: 800;
+}
+
+.challenge-year {
+  color: var(--muted2);
+  font-size: 11px;
+}
+
+.challenge-main {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin-top: 11px;
+}
+
+.team-logo {
+  width: 49px;
+  height: 49px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.team-name {
+  font-size: 23px;
+  line-height: 1.05;
+  font-weight: 950;
+}
+
+.team-record {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.challenge-controls {
+  display: flex;
+  gap: 8px;
+  margin-top: 15px;
+}
+
+.challenge-controls select {
+  flex: 1;
+  min-width: 0;
+  color: white;
+  background: #202934;
+  border: 1px solid #394655;
+  border-radius: 10px;
+  padding: 10px;
+  outline: none;
+}
+
+.small-button {
+  width: auto;
+  padding: 10px 13px;
+  background: #202934;
+  color: white;
+  border: 1px solid #394655;
+  border-radius: 10px;
+  font-weight: 800;
+}
+
+.small-button:hover {
+  background: #2b3542;
+}
+
+/* =========================================================
+   RADAR
+========================================================= */
+
+.radar-card {
+  padding: 15px 10px 13px;
+  text-align: center;
+}
+
+.radar-heading {
+  font-size: 20px;
+  font-weight: 950;
+}
+
+.radar-description {
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 4px;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  max-width: 430px;
+  height: auto;
+  margin: 0 auto;
+}
+
+.radar-legend {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  color: var(--muted);
+  font-size: 10px;
+  margin: -2px 0 10px;
+}
+
+.legend {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.legend-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+
+.legend-opponent {
+  background: #8995a3;
+}
+
+.legend-user {
+  background: white;
+}
+
+.radar-toggle {
+  display: flex;
+  gap: 7px;
+}
+
+.radar-toggle button {
+  flex: 1;
+  padding: 10px;
+  color: var(--muted);
+  background: #1b232d;
+  border: 1px solid #303b49;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .5px;
+}
+
+.radar-toggle button.active {
+  color: #080b10;
+  background: white;
+  border-color: white;
+}
+
+/* =========================================================
+   ROSTER SUMMARY
+========================================================= */
+
+.summary-card {
+  padding: 15px;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+}
+
+.summary-label {
+  color: var(--muted);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-weight: 800;
+}
+
+.summary-count {
+  font-size: 25px;
+  font-weight: 950;
+}
+
+.progress {
+  height: 8px;
+  background: #202833;
+  border-radius: 20px;
+  overflow: hidden;
+  margin-top: 9px;
+}
+
+.progress-bar {
+  width: 0%;
+  height: 100%;
+  background: white;
+  transition: width .25s ease;
+}
+
+.summary-stats {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 7px;
+  margin-top: 11px;
+}
+
+.summary-stat {
+  background: rgba(255,255,255,.035);
+  border: 1px solid #252f3b;
+  border-radius: 10px;
+  padding: 9px 5px;
+  text-align: center;
+}
+
+.summary-stat-value {
+  font-size: 16px;
+  font-weight: 900;
+}
+
+.summary-stat-label {
+  color: var(--muted2);
+  font-size: 9px;
+  margin-top: 3px;
+}
+
+/* =========================================================
+   SECTION HEADERS
+========================================================= */
+
+.section-heading {
+  margin: 23px 2px 9px;
+}
+
+.section-title {
+  font-size: 20px;
+  font-weight: 950;
+}
+
+.section-description {
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 4px;
+}
+
+/* =========================================================
+   POSITION SLOT
+========================================================= */
+
+.slot {
+  background: #111820;
+  border: 1px solid #273240;
+  border-radius: 16px;
+  padding: 12px;
+  margin-bottom: 10px;
+}
+
+.slot-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 9px;
+}
+
+.slot-name {
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.slot-state {
+  color: var(--muted2);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.slot-state.complete {
+  color: var(--success);
+}
+
+/* =========================================================
+   PLAYER CHOICES
+========================================================= */
+
+.choices {
+  display: grid;
+  gap: 7px;
+}
+
+.player-button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+  padding: 8px;
+  color: white;
+  background: #1b232d;
+  border: 1px solid #303b49;
+  border-radius: 12px;
+  transition:
+    transform .12s ease,
+    background .12s ease,
+    border-color .12s ease;
+}
+
+.player-button:hover {
+  background: #242e3a;
+  transform: translateY(-1px);
+}
+
+.player-button.selected {
+  background: #303b49;
+  border-color: white;
+}
+
+.player-photo {
+  width: 43px;
+  height: 43px;
+  border-radius: 9px;
+  object-fit: cover;
+  background:
+    linear-gradient(145deg,#303a46,#151b23);
+  flex-shrink: 0;
+}
+
+.player-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.player-name {
+  font-size: 13px;
+  font-weight: 900;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.player-meta {
+  color: var(--muted);
+  font-size: 10px;
+  margin-top: 3px;
+}
+
+.player-rating {
+  color: var(--muted2);
+  font-size: 9px;
+  margin-top: 3px;
+}
+
+.player-check {
+  width: 23px;
+  height: 23px;
+  border: 1px solid #485462;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: transparent;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.player-button.selected .player-check {
+  color: #111;
+  background: white;
+  border-color: white;
+}
+
+/* =========================================================
+   OPPONENT
+========================================================= */
+
+.opponent-card {
+  padding: 15px;
+}
+
+.opponent-header {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.opponent-logo {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+}
+
+.opponent-title {
+  font-size: 18px;
+  font-weight: 950;
+}
+
+.opponent-record {
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 3px;
+}
+
+.opponent-section {
+  margin-top: 13px;
+}
+
+.opponent-section-title {
+  color: var(--muted2);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 1.4px;
+  margin-bottom: 6px;
+}
+
+.opponent-line {
+  display: flex;
+  justify-content: space-between;
+  padding: 7px 0;
+  border-bottom: 1px solid #252e39;
+  font-size: 11px;
+}
+
+.opponent-line:last-child {
+  border-bottom: none;
+}
+
+.opponent-position {
+  color: var(--muted);
+}
+
+/* =========================================================
+   ACTION CARD
+========================================================= */
+
+.action-card {
+  padding: 16px;
+  text-align: center;
+}
+
+.action-title {
+  font-size: 21px;
+  font-weight: 950;
+}
+
+.action-description {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.5;
+  margin-top: 5px;
+}
+
+.play-button {
+  width: 100%;
+  margin-top: 14px;
+  padding: 13px;
+  color: #080b10;
+  background: white;
+  border: none;
+  border-radius: 11px;
+  font-weight: 950;
+  letter-spacing: .3px;
+}
+
+.play-button:hover {
+  background: #e3e7ec;
+}
+
+.play-button:disabled {
+  opacity: .5;
+  cursor: default;
+}
+
+.reset-button {
+  width: 100%;
+  margin-top: 8px;
+  padding: 11px;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid #303b49;
+  border-radius: 11px;
+  font-weight: 800;
+}
+
+/* =========================================================
+   RESULT
+========================================================= */
+
+.result {
+  display: none;
+  padding: 17px;
+  text-align: center;
+}
+
+.result.show {
+  display: block;
+}
+
+.result-badge {
+  display: inline-block;
+  color: #0a0d11;
+  background: white;
+  border-radius: 30px;
+  padding: 5px 9px;
+  font-size: 9px;
+  font-weight: 950;
+  letter-spacing: 1px;
+}
+
+.result-title {
+  margin-top: 10px;
+  font-size: 26px;
+  font-weight: 950;
+}
+
+.result-score {
+  margin-top: 8px;
+  font-size: 37px;
+  font-weight: 950;
+}
+
+.result-message {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 5px;
+  line-height: 1.5;
+}
+
+.result-breakdown {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 7px;
+  margin-top: 14px;
+}
+
+.breakdown {
+  background: #171f28;
+  border: 1px solid #293441;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.breakdown-value {
+  font-size: 17px;
+  font-weight: 900;
+}
+
+.breakdown-label {
+  color: var(--muted2);
+  font-size: 9px;
+  margin-top: 3px;
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.note {
+  color: #586474;
+  font-size: 9px;
+  line-height: 1.5;
+  text-align: center;
+  padding: 5px 15px 20px;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 420px) {
+
+  .app {
+    padding: 10px;
+  }
+
+  .title {
+    font-size: 28px;
+  }
+
+  .team-name {
+    font-size: 21px;
+  }
+
+  .player-photo {
+    width: 39px;
+    height: 39px;
+  }
+
+  .player-name {
+    font-size: 12px;
+  }
+
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <header class="header">
+    <div class="title">BEAT THE GREATEST</div>
+    <div class="subtitle">
+      Build a team. Beat baseball history.
+    </div>
+  </header>
+
+
+  <!-- =====================================================
+       CHAMPIONSHIP CHALLENGE
+  ====================================================== -->
+
+  <section class="card challenge">
+
+    <div class="challenge-top">
+      <div class="challenge-label">
+        Today's Challenge
+      </div>
+
+      <div
+        class="challenge-year"
+        id="challengeYear">
+      </div>
+    </div>
+
+    <div class="challenge-main">
+
+      <img
+        id="challengeLogo"
+        class="team-logo"
+        alt=""
+      >
+
+      <div>
+
+        <div
+          class="team-name"
+          id="championName">
+        </div>
+
+        <div
+          class="team-record"
+          id="championRecord">
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="challenge-controls">
+
+      <select id="teamSelect"></select>
+
+      <button
+        class="small-button"
+        onclick="randomChallenge()">
+        RANDOM
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       RADAR
+  ====================================================== -->
+
+  <section class="card radar-card">
+
+    <div
+      class="radar-heading"
+      id="radarTitle">
+      FIELDER MATCHUP
+    </div>
+
+    <div
+      class="radar-description"
+      id="radarSubtitle">
+      Championship team vs. your roster
+    </div>
+
+    <canvas
+      id="radarCanvas"
+      width="430"
+      height="430">
+    </canvas>
+
+    <div class="radar-legend">
+
+      <div class="legend">
+        <span class="legend-dot legend-opponent"></span>
+        Championship Team
+      </div>
+
+      <div class="legend">
+        <span class="legend-dot legend-user"></span>
+        Your Team
+      </div>
+
+    </div>
+
+    <div class="radar-toggle">
+
+      <button
+        id="fieldRadarButton"
+        class="active"
+        onclick="setRadarMode('fielders')">
+        FIELDERS
+      </button>
+
+      <button
+        id="pitchRadarButton"
+        onclick="setRadarMode('pitchers')">
+        PITCHERS
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       ROSTER SUMMARY
+  ====================================================== -->
+
+  <section class="card summary-card">
+
+    <div class="summary-row">
+
+      <div>
+        <div class="summary-label">
+          Roster Progress
+        </div>
+      </div>
+
+      <div
+        class="summary-count"
+        id="progressText">
+        0 / 19
+      </div>
+
+    </div>
+
+    <div class="progress">
+      <div
+        class="progress-bar"
+        id="progressBar">
+      </div>
+    </div>
+
+    <div class="summary-stats">
+
+      <div class="summary-stat">
+        <div
+          class="summary-stat-value"
+          id="fieldOverall">
+          —
+        </div>
+        <div class="summary-stat-label">
+          FIELD
+        </div>
+      </div>
+
+      <div class="summary-stat">
+        <div
+          class="summary-stat-value"
+          id="pitchOverall">
+          —
+        </div>
+        <div class="summary-stat-label">
+          PITCH
+        </div>
+      </div>
+
+      <div class="summary-stat">
+        <div
+          class="summary-stat-value"
+          id="teamOverall">
+          —
+        </div>
+        <div class="summary-stat-label">
+          TEAM
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       FIELDERS
+  ====================================================== -->
+
+  <div class="section-heading">
+
+    <div class="section-title">
+      Build Your Fielding Roster
+    </div>
+
+    <div class="section-description">
+      Choose one player from five historical choices at every position.
+    </div>
+
+  </div>
+
+  <div id="fieldingRoster"></div>
+
+
+  <!-- =====================================================
+       PITCHERS
+  ====================================================== -->
+
+  <div class="section-heading">
+
+    <div class="section-title">
+      Build Your Pitching Staff
+    </div>
+
+    <div class="section-description">
+      Four starters, two relievers, one closer, and one additional bench utility slot.
+    </div>
+
+  </div>
+
+  <div id="pitchingRoster"></div>
+
+
+  <!-- =====================================================
+       OPPONENT
+  ====================================================== -->
+
+  <div class="section-heading">
+
+    <div class="section-title">
+      Championship Team
+    </div>
+
+    <div class="section-description">
+      The historical team standing between you and victory.
+    </div>
+
+  </div>
+
+  <section class="card opponent-card">
+
+    <div class="opponent-header">
+
+      <img
+        id="opponentLogo"
+        class="opponent-logo"
+        alt=""
+      >
+
+      <div>
+
+        <div
+          id="opponentTitle"
+          class="opponent-title">
+        </div>
+
+        <div
+          id="opponentRecord"
+          class="opponent-record">
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="opponent-section">
+
+      <div class="opponent-section-title">
+        Fielding Lineup
+      </div>
+
+      <div id="opponentFielding"></div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       ACTION
+  ====================================================== -->
+
+  <section
+    class="card action-card"
+    id="actionCard">
+
+    <div
+      class="action-title"
+      id="actionTitle">
+      BUILD YOUR TEAM
+    </div>
+
+    <div
+      class="action-description"
+      id="actionDescription">
+      Select all nineteen players to unlock the matchup.
+    </div>
+
+    <button
+      class="play-button"
+      id="playButton"
+      onclick="playGame()"
+      disabled>
+      PLAY THE GAME
+    </button>
+
+    <button
+      class="reset-button"
+      onclick="resetRoster()">
+      CLEAR MY ROSTER
+    </button>
+
+  </section>
+
+
+  <!-- =====================================================
+       RESULT
+  ====================================================== -->
+
+  <section
+    class="card result"
+    id="result">
+
+    <div class="result-badge">
+      FINAL RESULT
+    </div>
+
+    <div
+      class="result-title"
+      id="resultTitle">
+      —
+    </div>
+
+    <div
+      class="result-score"
+      id="resultScore">
+      —
+    </div>
+
+    <div
+      class="result-message"
+      id="resultMessage">
+    </div>
+
+    <div class="result-breakdown">
+
+      <div class="breakdown">
+        <div
+          class="breakdown-value"
+          id="resultField">
+          —
+        </div>
+        <div class="breakdown-label">
+          YOUR FIELDING
+        </div>
+      </div>
+
+      <div class="breakdown">
+        <div
+          class="breakdown-value"
+          id="resultPitch">
+          —
+        </div>
+        <div class="breakdown-label">
+          YOUR PITCHING
+        </div>
+      </div>
+
+      <div class="breakdown">
+        <div
+          class="breakdown-value"
+          id="resultOpponent">
+          —
+        </div>
+        <div class="breakdown-label">
+          OPPONENT
+        </div>
+      </div>
+
+      <div class="breakdown">
+        <div
+          class="breakdown-value"
+          id="resultMargin">
+          —
+        </div>
+        <div class="breakdown-label">
+          RATING MARGIN
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <div class="note">
+    Prototype historical ratings are game-design values.
+    The next data pass can replace them with verified historical statistics.
+  </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   TEAM DATA
+========================================================= */
+
+const TEAM_IDS = {
+
+  "New York Mets": 121,
+  "Cincinnati Reds": 113,
+  "New York Yankees": 147,
+  "Chicago Cubs": 112,
+  "Boston Red Sox": 111,
+  "Washington Nationals": 120,
+  "Texas Rangers": 140,
+  "Los Angeles Dodgers": 119
+
+};
+
+
+const championshipTeams = [
+
+  {
+    year: 1927,
+    team: "New York Yankees",
+    record: "110–44",
+
+    field: {
+      power: 98,
+      contact: 96,
+      defense: 91,
+      speed: 82,
+      clutch: 97
+    },
+
+    pitching: {
+      velocity: 91,
+      movement: 89,
+      control: 94,
+      strikeouts: 88,
+      stamina: 94,
+      clutch: 95
+    },
+
+    roster: {
+      "Catcher": "Pat Collins",
+      "First Base": "Lou Gehrig",
+      "Second Base": "Aaron Ward",
+      "Shortstop": "Everett Scott",
+      "Third Base": "Joe Dugan",
+      "Left Field": "Bob Meusel",
+      "Center Field": "Earle Combs",
+      "Right Field": "Babe Ruth"
+    }
+
+  },
+
+
+  {
+    year: 1975,
+    team: "Cincinnati Reds",
+    record: "108–54",
+
+    field: {
+      power: 93,
+      contact: 94,
+      defense: 94,
+      speed: 86,
+      clutch: 96
+    },
+
+    pitching: {
+      velocity: 87,
+      movement: 89,
+      control: 91,
+      strikeouts: 89,
+      stamina: 94,
+      clutch: 92
+    },
+
+    roster: {
+      "Catcher": "Johnny Bench",
+      "First Base": "Tony Perez",
+      "Second Base": "Joe Morgan",
+      "Shortstop": "Dave Concepcion",
+      "Third Base": "Pete Rose",
+      "Left Field": "George Foster",
+      "Center Field": "Cesar Geronimo",
+      "Right Field": "Ken Griffey"
+    }
+
+  },
+
+
+  {
+    year: 1986,
+    team: "New York Mets",
+    record: "108–54",
+
+    field: {
+      power: 84,
+      contact: 88,
+      defense: 92,
+      speed: 78,
+      clutch: 94
+    },
+
+    pitching: {
+      velocity: 90,
+      movement: 92,
+      control: 89,
+      strikeouts: 94,
+      stamina: 93,
+      clutch: 95
+    },
+
+    roster: {
+      "Catcher": "Gary Carter",
+      "First Base": "Keith Hernandez",
+      "Second Base": "Wally Backman",
+      "Shortstop": "Rafael Santana",
+      "Third Base": "Ray Knight",
+      "Left Field": "Mookie Wilson",
+      "Center Field": "Lenny Dykstra",
+      "Right Field": "Darryl Strawberry"
+    }
+
+  },
+
+
+  {
+    year: 1998,
+    team: "New York Yankees",
+    record: "114–48",
+
+    field: {
+      power: 88,
+      contact: 92,
+      defense: 91,
+      speed: 76,
+      clutch: 93
+    },
+
+    pitching: {
+      velocity: 91,
+      movement: 90,
+      control: 93,
+      strikeouts: 91,
+      stamina: 94,
+      clutch: 93
+    },
+
+    roster: {
+      "Catcher": "Jorge Posada",
+      "First Base": "Tino Martinez",
+      "Second Base": "Chuck Knoblauch",
+      "Shortstop": "Derek Jeter",
+      "Third Base": "Scott Brosius",
+      "Left Field": "Chad Curtis",
+      "Center Field": "Bernie Williams",
+      "Right Field": "Paul O'Neill"
+    }
+
+  },
+
+
+  {
+    year: 2004,
+    team: "Boston Red Sox",
+    record: "98–64",
+
+    field: {
+      power: 96,
+      contact: 93,
+      defense: 83,
+      speed: 75,
+      clutch: 99
+    },
+
+    pitching: {
+      velocity: 89,
+      movement: 88,
+      control: 90,
+      strikeouts: 90,
+      stamina: 91,
+      clutch: 98
+    },
+
+    roster: {
+      "Catcher": "Jason Varitek",
+      "First Base": "Kevin Millar",
+      "Second Base": "Mark Bellhorn",
+      "Shortstop": "Edgar Renteria",
+      "Third Base": "Bill Mueller",
+      "Left Field": "Manny Ramirez",
+      "Center Field": "Johnny Damon",
+      "Right Field": "Trot Nixon"
+    }
+
+  },
+
+
+  {
+    year: 2016,
+    team: "Chicago Cubs",
+    record: "103–58",
+
+    field: {
+      power: 91,
+      contact: 90,
+      defense: 94,
+      speed: 79,
+      clutch: 90
+    },
+
+    pitching: {
+      velocity: 92,
+      movement: 93,
+      control: 92,
+      strikeouts: 96,
+      stamina: 93,
+      clutch: 91
+    },
+
+    roster: {
+      "Catcher": "Miguel Montero",
+      "First Base": "Anthony Rizzo",
+      "Second Base": "Javier Baez",
+      "Shortstop": "Addison Russell",
+      "Third Base": "Kris Bryant",
+      "Left Field": "Kyle Schwarber",
+      "Center Field": "Dexter Fowler",
+      "Right Field": "Jason Heyward"
+    }
+
+  },
+
+
+  {
+    year: 2019,
+    team: "Washington Nationals",
+    record: "93–69",
+
+    field: {
+      power: 92,
+      contact: 91,
+      defense: 85,
+      speed: 77,
+      clutch: 98
+    },
+
+    pitching: {
+      velocity: 94,
+      movement: 92,
+      control: 91,
+      strikeouts: 95,
+      stamina: 91,
+      clutch: 97
+    },
+
+    roster: {
+      "Catcher": "Yan Gomes",
+      "First Base": "Ryan Zimmerman",
+      "Second Base": "Brian Dozier",
+      "Shortstop": "Trea Turner",
+      "Third Base": "Anthony Rendon",
+      "Left Field": "Juan Soto",
+      "Center Field": "Victor Robles",
+      "Right Field": "Adam Eaton"
+    }
+
+  },
+
+
+  {
+    year: 2023,
+    team: "Texas Rangers",
+    record: "90–72",
+
+    field: {
+      power: 95,
+      contact: 92,
+      defense: 84,
+      speed: 82,
+      clutch: 98
+    },
+
+    pitching: {
+      velocity: 93,
+      movement: 90,
+      control: 88,
+      strikeouts: 93,
+      stamina: 91,
+      clutch: 96
+    },
+
+    roster: {
+      "Catcher": "Jonah Heim",
+      "First Base": "Nathaniel Lowe",
+      "Second Base": "Marcus Semien",
+      "Shortstop": "Corey Seager",
+      "Third Base": "Josh Jung",
+      "Left Field": "Ezequiel Duran",
+      "Center Field": "Leody Taveras",
+      "Right Field": "Adolis Garcia"
+    }
+
+  },
+
+
+  {
+    year: 2024,
+    team: "Los Angeles Dodgers",
+    record: "98–64",
+
+    field: {
+      power: 97,
+      contact: 93,
+      defense: 87,
+      speed: 84,
+      clutch: 96
+    },
+
+    pitching: {
+      velocity: 93,
+      movement: 94,
+      control: 90,
+      strikeouts: 97,
+      stamina: 88,
+      clutch: 95
+    },
+
+    roster: {
+      "Catcher": "Will Smith",
+      "First Base": "Freddie Freeman",
+      "Second Base": "Gavin Lux",
+      "Shortstop": "Mookie Betts",
+      "Third Base": "Max Muncy",
+      "Left Field": "Teoscar Hernandez",
+      "Center Field": "Andy Pages",
+      "Right Field": "Jason Heyward"
+    }
+
+  }
+
+];
+
+
+/* =========================================================
+   PLAYER DATABASE
+========================================================= */
+
+/*
+   Each player:
+   name, year,
+   power, contact, defense, speed, clutch
+*/
+
+const fieldingRoster = [
+
+  {
+    position: "Catcher",
+    players: [
+
+      ["Thurman Munson",1976,88,94,91,62,95],
+      ["Johnny Bench",1972,96,90,98,64,96],
+      ["Yogi Berra",1954,90,95,94,58,97],
+      ["Ivan Rodriguez",1999,86,91,99,78,94],
+      ["Gary Carter",1984,85,87,97,59,93]
+
+    ]
+  },
+
+
+  {
+    position: "First Base",
+    players: [
+
+      ["Lou Gehrig",1927,99,98,88,61,96],
+      ["Albert Pujols",2009,98,96,91,58,94],
+      ["Jeff Bagwell",1994,94,93,90,78,91],
+      ["Eddie Murray",1983,91,95,94,64,94],
+      ["Frank Thomas",1994,96,93,85,48,92]
+
+    ]
+  },
+
+
+  {
+    position: "Second Base",
+    players: [
+
+      ["Joe Morgan",1976,87,94,95,97,94],
+      ["Roberto Alomar",1999,84,94,96,88,91],
+      ["Rogers Hornsby",1924,96,99,82,72,95],
+      ["Jackie Robinson",1949,86,94,96,93,98],
+      ["Rod Carew",1977,88,99,91,79,92]
+
+    ]
+  },
+
+
+  {
+    position: "Shortstop",
+    players: [
+
+      ["Cal Ripken Jr.",1991,93,92,98,66,96],
+      ["Derek Jeter",1999,87,94,88,76,94],
+      ["Ozzie Smith",1987,69,94,100,91,95],
+      ["Ernie Banks",1958,94,91,91,64,94],
+      ["Barry Larkin",1991,86,95,96,91,93]
+
+    ]
+  },
+
+
+  {
+    position: "Third Base",
+    players: [
+
+      ["Mike Schmidt",1981,97,90,99,72,96],
+      ["George Brett",1980,91,98,92,76,96],
+      ["Wade Boggs",1987,77,99,94,65,91],
+      ["Eddie Mathews",1953,95,91,91,61,93],
+      ["Chipper Jones",1999,97,94,89,70,95]
+
+    ]
+  },
+
+
+  {
+    position: "Left Field",
+    players: [
+
+      ["Barry Bonds",2001,100,97,91,82,98],
+      ["Rickey Henderson",1985,84,94,88,100,97],
+      ["Ted Williams",1946,98,100,84,61,97],
+      ["Minnie Minoso",1954,84,92,93,91,94],
+      ["Carl Yastrzemski",1967,91,94,95,68,98]
+
+    ]
+  },
+
+
+  {
+    position: "Center Field",
+    players: [
+
+      ["Willie Mays",1965,99,96,100,96,98],
+      ["Ken Griffey Jr.",1997,99,95,98,91,96],
+      ["Mickey Mantle",1956,98,97,95,100,97],
+      ["Joe DiMaggio",1937,94,97,98,88,98],
+      ["Cesar Cedeno",1972,88,93,96,96,91]
+
+    ]
+  },
+
+
+  {
+    position: "Right Field",
+    players: [
+
+      ["Babe Ruth",1927,100,99,80,76,99],
+      ["Hank Aaron",1957,98,97,94,78,97],
+      ["Roberto Clemente",1967,92,96,100,84,98],
+      ["Frank Robinson",1966,98,95,94,78,98],
+      ["Tony Gwynn",1994,83,100,94,77,95]
+
+    ]
+  },
+
+
+  {
+    position: "Designated Hitter",
+    players: [
+
+      ["Edgar Martinez",1995,91,98,78,58,96],
+      ["David Ortiz",2006,98,94,68,43,99],
+      ["Frank Thomas",1994,99,96,78,45,96],
+      ["Jim Thome",2002,98,92,70,51,93],
+      ["Nelson Cruz",2015,97,91,71,48,91]
+
+    ]
+  },
+
+
+  {
+    position: "Bench 1",
+    players: [
+
+      ["Pete Rose",1973,82,97,90,76,94],
+      ["Paul Molitor",1991,86,96,88,91,95],
+      ["Tony Gwynn",1997,79,98,95,78,94],
+      ["Craig Biggio",1997,88,92,90,89,92],
+      ["Chipper Jones",1999,97,94,89,70,95]
+
+    ]
+  },
+
+
+  {
+    position: "Bench 2",
+    players: [
+
+      ["Mookie Betts",2018,92,96,96,91,95],
+      ["Alex Rodriguez",2000,99,96,91,85,96],
+      ["Roberto Clemente",1967,92,96,100,84,98],
+      ["Kirby Puckett",1988,83,95,98,89,96],
+      ["Adrian Beltre",2004,91,91,99,70,92]
+
+    ]
+  },
+
+
+  {
+    position: "Bench 3",
+    players: [
+
+      ["Stan Musial",1948,94,98,91,79,97],
+      ["Hank Greenberg",1938,98,94,86,54,95],
+      ["Manny Ramirez",2000,98,96,82,58,96],
+      ["Vladimir Guerrero",2000,97,96,83,78,94],
+      ["Miguel Cabrera",2013,99,98,82,47,97]
+
+    ]
+  }
+
+];
+
+
+/* =========================================================
+   PITCHER DATABASE
+========================================================= */
+
+const pitchingRoster = [
+
+  {
+    position: "Starting Pitcher 1",
+    players: [
+
+      ["Sandy Koufax",1965,98,99,94,99,92,98],
+      ["Pedro Martinez",1999,97,98,98,99,91,97],
+      ["Nolan Ryan",1973,100,99,82,99,96,91],
+      ["Greg Maddux",1994,88,96,100,91,95,94],
+      ["Randy Johnson",2002,99,99,91,99,96,95]
+
+    ]
+  },
+
+
+  {
+    position: "Starting Pitcher 2",
+    players: [
+
+      ["Tom Seaver",1971,96,95,94,97,96,96],
+      ["Roger Clemens",1997,98,96,95,98,94,95],
+      ["Bob Gibson",1968,97,98,92,99,96,99],
+      ["Cy Young",1901,91,94,96,90,100,97],
+      ["Justin Verlander",2011,98,96,94,98,96,94]
+
+    ]
+  },
+
+
+  {
+    position: "Starting Pitcher 3",
+    players: [
+
+      ["Walter Johnson",1913,98,99,95,99,99,98],
+      ["Christy Mathewson",1909,92,97,99,94,99,98],
+      ["Lefty Grove",1931,99,97,92,99,96,97],
+      ["Steve Carlton",1972,95,98,91,99,96,96],
+      ["Max Scherzer",2017,97,97,94,99,94,94]
+
+    ]
+  },
+
+
+  {
+    position: "Starting Pitcher 4",
+    players: [
+
+      ["Pedro Martinez",2000,98,99,98,99,91,97],
+      ["Randy Johnson",1995,99,98,92,99,97,94],
+      ["Tom Seaver",1973,95,96,95,97,96,97],
+      ["Gerrit Cole",2019,98,96,94,98,95,93],
+      ["Max Scherzer",2017,97,97,94,99,94,94]
+
+    ]
+  },
+
+
+  {
+    position: "Reliever 1",
+    players: [
+
+      ["Trevor Hoffman",1998,94,99,97,97,89,97],
+      ["Dennis Eckersley",1990,92,99,98,96,88,98],
+      ["Goose Gossage",1977,98,95,91,98,94,96],
+      ["Billy Wagner",1999,100,99,96,99,85,96],
+      ["Hoyt Wilhelm",1959,78,99,100,94,90,98]
+
+    ]
+  },
+
+
+  {
+    position: "Reliever 2",
+    players: [
+
+      ["Rollie Fingers",1981,91,98,96,95,90,98],
+      ["Bruce Sutter",1977,91,99,97,96,88,97],
+      ["John Smoltz",2002,96,97,94,98,91,95],
+      ["Andrew Miller",2016,98,99,95,99,87,94],
+      ["Dennis Eckersley",1988,93,98,98,96,89,97]
+
+    ]
+  },
+
+
+  {
+    position: "Closer",
+    players: [
+
+      ["Mariano Rivera",2004,97,100,100,99,90,100],
+      ["Trevor Hoffman",1998,94,99,97,97,89,97],
+      ["Billy Wagner",1999,100,99,96,99,85,96],
+      ["Lee Smith",1991,97,96,91,98,92,95],
+      ["Dennis Eckersley",1992,92,99,99,96,88,98]
+
+    ]
+  }
+
+];
+
+
+/* =========================================================
+   STATE
+========================================================= */
+
+const TOTAL_SLOTS = 19;
+
+let selectedFielders = {};
+let selectedPitchers = {};
+
+let radarMode = "fielders";
+
+let currentChampion = null;
+
+
+/* =========================================================
+   TEAM LOGO
+========================================================= */
+
+function teamLogo(team) {
+
+  const id = TEAM_IDS[team];
+
+  if (!id) return "";
+
+  return (
+    "https://www.mlbstatic.com/team-logos/" +
+    "team-cap-on-light/" +
+    id +
+    ".svg"
+  );
+
+}
+
+
+/* =========================================================
+   PLAYER IMAGE
+========================================================= */
+
+function initials(name) {
+
+  return name
+    .split(" ")
+    .map(x => x[0])
+    .slice(0,2)
+    .join("");
+
+}
+
+
+function createFallbackAvatar(name) {
+
+  const svg =
+    "<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100'>" +
+    "<rect width='100' height='100' fill='%23252e38'/>" +
+    "<text x='50' y='56' text-anchor='middle' " +
+    "font-family='Arial' font-size='30' fill='white'>" +
+    initials(name) +
+    "</text></svg>";
+
+  return (
+    "data:image/svg+xml;charset=UTF-8," +
+    encodeURIComponent(svg)
+  );
+
+}
+
+
+/*
+   We keep the image layer isolated so actual verified
+   historical headshot IDs can be inserted later.
+*/
+
+function playerPhoto(name) {
+
+  return createFallbackAvatar(name);
+
+}
+
+
+/* =========================================================
+   CHALLENGE SELECTOR
+========================================================= */
+
+function buildTeamSelector() {
+
+  const select =
+    document.getElementById("teamSelect");
+
+  select.innerHTML = "";
+
+  championshipTeams.forEach(
+    (team,index) => {
+
+      const option =
+        document.createElement("option");
+
+      option.value = index;
+
+      option.textContent =
+        team.year +
+        " " +
+        team.team;
+
+      select.appendChild(option);
+
+    }
+  );
+
+  select.onchange =
+    function() {
+
+      currentChampion =
+        championshipTeams[
+          Number(this.value)
+        ];
+
+      setupChallenge();
+      resetRoster();
+
+    };
+
+}
+
+
+function randomChallenge() {
+
+  let next;
+
+  do {
+
+    next =
+      Math.floor(
+        Math.random() *
+        championshipTeams.length
+      );
+
+  } while (
+    championshipTeams[next] ===
+    currentChampion &&
+    championshipTeams.length > 1
+  );
+
+  currentChampion =
+    championshipTeams[next];
+
+  document.getElementById(
+    "teamSelect"
+  ).value =
+    next;
+
+  setupChallenge();
+
+  resetRoster();
+
+}
+
+
+/* =========================================================
+   DISPLAY CHALLENGE
+========================================================= */
+
+function setupChallenge() {
+
+  document.getElementById(
+    "challengeYear"
+  ).textContent =
+    currentChampion.year;
+
+  document.getElementById(
+    "championName"
+  ).textContent =
+    currentChampion.team;
+
+  document.getElementById(
+    "championRecord"
+  ).textContent =
+    currentChampion.record +
+    " regular-season record";
+
+  const logo =
+    teamLogo(
+      currentChampion.team
+    );
+
+  document.getElementById(
+    "challengeLogo"
+  ).src =
+    logo;
+
+  document.getElementById(
+    "opponentLogo"
+  ).src =
+    logo;
+
+  document.getElementById(
+    "opponentTitle"
+  ).textContent =
+    currentChampion.year +
+    " " +
+    currentChampion.team;
+
+  document.getElementById(
+    "opponentRecord"
+  ).textContent =
+    currentChampion.record +
+    " regular-season record";
+
+  createOpponentRoster();
+
+  drawRadar();
+
+}
+
+
+/* =========================================================
+   OPPONENT ROSTER
+========================================================= */
+
+function createOpponentRoster() {
+
+  const container =
+    document.getElementById(
+      "opponentFielding"
+    );
+
+  container.innerHTML = "";
+
+  Object.entries(
+    currentChampion.roster
+  ).forEach(
+    ([position,player]) => {
+
+      const row =
+        document.createElement("div");
+
+      row.className =
+        "opponent-line";
+
+      row.innerHTML =
+        "<span class='opponent-position'>" +
+        position +
+        "</span>" +
+        "<span>" +
+        player +
+        "</span>";
+
+      container.appendChild(row);
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   SHUFFLE
+========================================================= */
+
+function shuffle(array) {
+
+  const copy =
+    [...array];
+
+  for (
+    let i = copy.length - 1;
+    i > 0;
+    i--
+  ) {
+
+    const j =
+      Math.floor(
+        Math.random() *
+        (i + 1)
+      );
+
+    [
+      copy[i],
+      copy[j]
+    ] =
+    [
+      copy[j],
+      copy[i]
+    ];
+
+  }
+
+  return copy;
+
+}
+
+
+/* =========================================================
+   PLAYER CARD
+========================================================= */
+
+function createPlayerButton(
+  player,
+  state,
+  slotIndex,
+  choices
+) {
+
+  const button =
+    document.createElement("button");
+
+  button.className =
+    "player-button";
+
+  const image =
+    document.createElement("img");
+
+  image.className =
+    "player-photo";
+
+  image.src =
+    playerPhoto(player[0]);
+
+  image.alt =
+    player[0];
+
+  const info =
+    document.createElement("div");
+
+  info.className =
+    "player-info";
+
+  const name =
+    document.createElement("div");
+
+  name.className =
+    "player-name";
+
+  name.textContent =
+    player[0];
+
+  const meta =
+    document.createElement("div");
+
+  meta.className =
+    "player-meta";
+
+  meta.textContent =
+    "Best / qualifying season: " +
+    player[1];
+
+  const rating =
+    document.createElement("div");
+
+  rating.className =
+    "player-rating";
+
+  rating.textContent =
+    "Overall profile: " +
+    playerOverall(
+      player,
+      radarMode === "fielders"
+    );
+
+  info.appendChild(name);
+  info.appendChild(meta);
+  info.appendChild(rating);
+
+  const check =
+    document.createElement("div");
+
+  check.className =
+    "player-check";
+
+  check.textContent =
+    "✓";
+
+  button.appendChild(image);
+  button.appendChild(info);
+  button.appendChild(check);
+
+  button.onclick =
+    function() {
+
+      state[slotIndex] =
+        player;
+
+      choices
+        .querySelectorAll(
+          ".player-button"
+        )
+        .forEach(
+          other => {
+
+            other.classList.remove(
+              "selected"
+            );
+
+          }
+        );
+
+      button.classList.add(
+        "selected"
+      );
+
+      updateTeam();
+
+    };
+
+  return button;
+
+}
+
+
+/* =========================================================
+   PLAYER OVERALL
+========================================================= */
+
+function playerOverall(
+  player,
+  isFielder
+) {
+
+  let total = 0;
+
+  if (isFielder) {
+
+    for (
+      let i = 2;
+      i <= 6;
+      i++
+    ) {
+      total += player[i];
+    }
+
+    return Math.round(
+      total / 5
+    );
+
+  }
+
+  for (
+    let i = 2;
+    i <= 7;
+    i++
+  ) {
+    total += player[i];
+  }
+
+  return Math.round(
+    total / 6
+  );
+
+}
+
+
+/* =========================================================
+   CREATE ROSTER
+========================================================= */
+
+function createRoster(
+  roster,
+  containerId,
+  state
+) {
+
+  const container =
+    document.getElementById(
+      containerId
+    );
+
+  container.innerHTML = "";
+
+  roster.forEach(
+    (slot,slotIndex) => {
+
+      const slotBox =
+        document.createElement("div");
+
+      slotBox.className =
+        "slot";
+
+      const header =
+        document.createElement("div");
+
+      header.className =
+        "slot-header";
+
+      const title =
+        document.createElement("div");
+
+      title.className =
+        "slot-name";
+
+      title.textContent =
+        slot.position;
+
+      const status =
+        document.createElement("div");
+
+      status.className =
+        "slot-state";
+
+      status.id =
+        "slot-state-" +
+        containerId +
+        "-" +
+        slotIndex;
+
+      status.textContent =
+        "Choose 1";
+
+      header.appendChild(title);
+      header.appendChild(status);
+
+      const choices =
+        document.createElement("div");
+
+      choices.className =
+        "choices";
+
+      /*
+         The database contains five candidates.
+         We shuffle them so the presentation order
+         changes whenever the roster is rebuilt.
+      */
+
+      shuffle(
+        slot.players
+      ).forEach(
+        player => {
+
+          choices.appendChild(
+
+            createPlayerButton(
+              player,
+              state,
+              slotIndex,
+              choices
+            )
+
+          );
+
+        }
+      );
+
+      slotBox.appendChild(header);
+      slotBox.appendChild(choices);
+
+      container.appendChild(slotBox);
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   AVERAGES
+========================================================= */
+
+function averageState(
+  state,
+  index
+) {
+
+  const players =
+    Object.values(state);
+
+  if (!players.length) {
+    return 50;
+  }
+
+  let total = 0;
+
+  players.forEach(
+    player => {
+
+      total +=
+        Number(player[index]);
+
+    }
+  );
+
+  return Math.round(
+    total / players.length
+  );
+
+}
+
+
+function getFieldRatings() {
+
+  return {
+
+    power:
+      averageState(
+        selectedFielders,
+        2
+      ),
+
+    contact:
+      averageState(
+        selectedFielders,
+        3
+      ),
+
+    defense:
+      averageState(
+        selectedFielders,
+        4
+      ),
+
+    speed:
+      averageState(
+        selectedFielders,
+        5
+      ),
+
+    clutch:
+      averageState(
+        selectedFielders,
+        6
+      )
+
+  };
+
+}
+
+
+function getPitchRatings() {
+
+  return {
+
+    velocity:
+      averageState(
+        selectedPitchers,
+        2
+      ),
+
+    movement:
+      averageState(
+        selectedPitchers,
+        3
+      ),
+
+    control:
+      averageState(
+        selectedPitchers,
+        4
+      ),
+
+    strikeouts:
+      averageState(
+        selectedPitchers,
+        5
+      ),
+
+    stamina:
+      averageState(
+        selectedPitchers,
+        6
+      ),
+
+    clutch:
+      averageState(
+        selectedPitchers,
+        7
+      )
+
+  };
+
+}
+
+
+/* =========================================================
+   OVERALLS
+========================================================= */
+
+function fieldOverall() {
+
+  const r =
+    getFieldRatings();
+
+  const values = [
+    r.power,
+    r.contact,
+    r.defense,
+    r.speed,
+    r.clutch
+  ];
+
+  const selected =
+    Object.keys(
+      selectedFielders
+    ).length;
+
+  if (!selected) {
+    return null;
+  }
+
+  return Math.round(
+    values.reduce(
+      (a,b) => a + b,
+      0
+    ) / 5
+  );
+
+}
+
+
+function pitchOverall() {
+
+  const r =
+    getPitchRatings();
+
+  const values = [
+    r.velocity,
+    r.movement,
+    r.control,
+    r.strikeouts,
+    r.stamina,
+    r.clutch
+  ];
+
+  const selected =
+    Object.keys(
+      selectedPitchers
+    ).length;
+
+  if (!selected) {
+    return null;
+  }
+
+  return Math.round(
+    values.reduce(
+      (a,b) => a + b,
+      0
+    ) / 6
+  );
+
+}
+
+
+/* =========================================================
+   UPDATE UI
+========================================================= */
+
+function updateTeam() {
+
+  const fieldCount =
+    Object.keys(
+      selectedFielders
+    ).length;
+
+  const pitchCount =
+    Object.keys(
+      selectedPitchers
+    ).length;
+
+  const total =
+    fieldCount +
+    pitchCount;
+
+  document.getElementById(
+    "progressText"
+  ).textContent =
+    total +
+    " / " +
+    TOTAL_SLOTS;
+
+  document.getElementById(
+    "progressBar"
+  ).style.width =
+    (
+      total /
+      TOTAL_SLOTS *
+      100
+    ) +
+    "%";
+
+  const fo =
+    fieldOverall();
+
+  const po =
+    pitchOverall();
+
+  document.getElementById(
+    "fieldOverall"
+  ).textContent =
+    fo === null
+      ? "—"
+      : fo;
+
+  document.getElementById(
+    "pitchOverall"
+  ).textContent =
+    po === null
+      ? "—"
+      : po;
+
+  const team =
+    fo !== null && po !== null
+      ? Math.round(
+          fo * .55 +
+          po * .45
+        )
+      : null;
+
+  document.getElementById(
+    "teamOverall"
+  ).textContent =
+    team === null
+      ? "—"
+      : team;
+
+  updateSlotStates();
+
+  const complete =
+    total === TOTAL_SLOTS;
+
+  const playButton =
+    document.getElementById(
+      "playButton"
+    );
+
+  playButton.disabled =
+    !complete;
+
+  document.getElementById(
+    "actionTitle"
+  ).textContent =
+    complete
+      ? "YOUR TEAM IS READY"
+      : "BUILD YOUR TEAM";
+
+  document.getElementById(
+    "actionDescription"
+  ).textContent =
+    complete
+      ? "Every roster slot is filled. See how your historical team matches up."
+      : "Select one player from every position to unlock the matchup.";
+
+  drawRadar();
+
+}
+
+
+/* =========================================================
+   SLOT STATES
+========================================================= */
+
+function updateSlotStates() {
+
+  fieldingRoster.forEach(
+    (slot,index) => {
+
+      const element =
+        document.getElementById(
+          "slot-state-fieldingRoster-" +
+          index
+        );
+
+      if (!element) return;
+
+      const complete =
+        selectedFielders[index] !==
+        undefined;
+
+      element.textContent =
+        complete
+          ? "Selected"
+          : "Choose 1";
+
+      element.classList.toggle(
+        "complete",
+        complete
+      );
+
+    }
+  );
+
+
+  pitchingRoster.forEach(
+    (slot,index) => {
+
+      const element =
+        document.getElementById(
+          "slot-state-pitchingRoster-" +
+          index
+        );
+
+      if (!element) return;
+
+      const complete =
+        selectedPitchers[index] !==
+        undefined;
+
+      element.textContent =
+        complete
+          ? "Selected"
+          : "Choose 1";
+
+      element.classList.toggle(
+        "complete",
+        complete
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   RADAR SWITCH
+========================================================= */
+
+function setRadarMode(mode) {
+
+  radarMode =
+    mode;
+
+  document
+    .getElementById(
+      "fieldRadarButton"
+    )
+    .classList.toggle(
+      "active",
+      mode === "fielders"
+    );
+
+  document
+    .getElementById(
+      "pitchRadarButton"
+    )
+    .classList.toggle(
+      "active",
+      mode === "pitchers"
+    );
+
+  if (
+    mode === "fielders"
+  ) {
+
+    document.getElementById(
+      "radarTitle"
+    ).textContent =
+      "FIELDER MATCHUP";
+
+    document.getElementById(
+      "radarSubtitle"
+    ).textContent =
+      "Championship lineup vs. your roster";
+
+  } else {
+
+    document.getElementById(
+      "radarTitle"
+    ).textContent =
+      "PITCHER MATCHUP";
+
+    document.getElementById(
+      "radarSubtitle"
+    ).textContent =
+      "Championship staff vs. your pitching staff";
+
+  }
+
+  drawRadar();
+
+}
+
+
+/* =========================================================
+   RADAR
+========================================================= */
+
+function drawRadar() {
+
+  const canvas =
+    document.getElementById(
+      "radarCanvas"
+    );
+
+  const ctx =
+    canvas.getContext("2d");
+
+  ctx.clearRect(
+    0,
+    0,
+    canvas.width,
+    canvas.height
+  );
+
+  let userValues;
+  let opponentValues;
+  let labels;
+
+  if (
+    radarMode === "fielders"
+  ) {
+
+    const user =
+      getFieldRatings();
+
+    userValues = [
+      user.power,
+      user.contact,
+      user.defense,
+      user.speed,
+      user.clutch
+    ];
+
+    opponentValues = [
+      currentChampion.field.power,
+      currentChampion.field.contact,
+      currentChampion.field.defense,
+      currentChampion.field.speed,
+      currentChampion.field.clutch
+    ];
+
+    labels = [
+      "POWER",
+      "CONTACT",
+      "DEFENSE",
+      "SPEED",
+      "CLUTCH"
+    ];
+
+  } else {
+
+    const user =
+      getPitchRatings();
+
+    userValues = [
+      user.velocity,
+      user.movement,
+      user.control,
+      user.strikeouts,
+      user.stamina,
+      user.clutch
+    ];
+
+    opponentValues = [
+      currentChampion.pitching.velocity,
+      currentChampion.pitching.movement,
+      currentChampion.pitching.control,
+      currentChampion.pitching.strikeouts,
+      currentChampion.pitching.stamina,
+      currentChampion.pitching.clutch
+    ];
+
+    labels = [
+      "VELOCITY",
+      "MOVEMENT",
+      "CONTROL",
+      "K'S",
+      "STAMINA",
+      "CLUTCH"
+    ];
+
+  }
+
+
+  const cx =
+    canvas.width / 2;
+
+  const cy =
+    188;
+
+  const radius =
+    130;
+
+
+  function point(
+    value,
+    index,
+    total
+  ) {
+
+    const angle =
+      Math.PI * 2 *
+      index /
+      total -
+      Math.PI / 2;
+
+    const r =
+      radius *
+      value /
+      100;
+
+    return {
+
+      x:
+        cx +
+        Math.cos(angle) *
+        r,
+
+      y:
+        cy +
+        Math.sin(angle) *
+        r
+
+    };
+
+  }
+
+
+  /* GRID */
+
+  for (
+    let level = 1;
+    level <= 5;
+    level++
+  ) {
+
+    const r =
+      radius *
+      level /
+      5;
+
+    ctx.beginPath();
+
+    for (
+      let i = 0;
+      i < userValues.length;
+      i++
+    ) {
+
+      const p =
+        point(
+          level * 20,
+          i,
+          userValues.length
+        );
+
+      if (i === 0) {
+        ctx.moveTo(
+          p.x,
+          p.y
+        );
+      } else {
+        ctx.lineTo(
+          p.x,
+          p.y
+        );
+      }
+
+    }
+
+    ctx.closePath();
+
+    ctx.strokeStyle =
+      "#303b49";
+
+    ctx.lineWidth = 1;
+
+    ctx.stroke();
+
+  }
+
+
+  /* AXES */
+
+  for (
+    let i = 0;
+    i < userValues.length;
+    i++
+  ) {
+
+    const p =
+      point(
+        100,
+        i,
+        userValues.length
+      );
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+      cx,
+      cy
+    );
+
+    ctx.lineTo(
+      p.x,
+      p.y
+    );
+
+    ctx.strokeStyle =
+      "#252f3a";
+
+    ctx.lineWidth = 1;
+
+    ctx.stroke();
+
+  }
+
+
+  function polygon(
+    values,
+    fill,
+    stroke,
+    width
+  ) {
+
+    ctx.beginPath();
+
+    values.forEach(
+      (value,index) => {
+
+        const p =
+          point(
+            value,
+            index,
+            values.length
+          );
+
+        if (index === 0) {
+          ctx.moveTo(
+            p.x,
+            p.y
+          );
+        } else {
+          ctx.lineTo(
+            p.x,
+            p.y
+          );
+        }
+
+      }
+    );
+
+    ctx.closePath();
+
+    ctx.fillStyle =
+      fill;
+
+    ctx.fill();
+
+    ctx.strokeStyle =
+      stroke;
+
+    ctx.lineWidth =
+      width;
+
+    ctx.stroke();
+
+  }
+
+
+  /* CHAMPIONSHIP TEAM */
+
+  polygon(
+    opponentValues,
+    "rgba(137,149,163,.14)",
+    "#8d98a6",
+    2
+  );
+
+
+  /* USER TEAM */
+
+  polygon(
+    userValues,
+    "rgba(255,255,255,.17)",
+    "#ffffff",
+    3
+  );
+
+
+  /* LABELS */
+
+  ctx.font =
+    "bold 10px Arial";
+
+  ctx.fillStyle =
+    "#cfd6de";
+
+  ctx.textAlign =
+    "center";
+
+  labels.forEach(
+    (label,index) => {
+
+      const angle =
+        Math.PI * 2 *
+        index /
+        labels.length -
+        Math.PI / 2;
+
+      const x =
+        cx +
+        Math.cos(angle) *
+        161;
+
+      const y =
+        cy +
+        Math.sin(angle) *
+        161;
+
+      ctx.fillText(
+        label,
+        x,
+        y
+      );
+
+    }
+  );
+
+
+  ctx.font =
+    "9px Arial";
+
+  ctx.fillStyle =
+    "#5f6c7b";
+
+  ctx.fillText(
+    "CHAMPIONSHIP",
+    cx,
+    350
+  );
+
+  ctx.fillStyle =
+    "#b8c1cb";
+
+  ctx.fillText(
+    "YOUR ROSTER",
+    cx,
+    364
+  );
+
+}
+
+
+/* =========================================================
+   RESET ROSTER
+========================================================= */
+
+function resetRoster() {
+
+  selectedFielders = {};
+  selectedPitchers = {};
+
+  document.getElementById(
+    "result"
+  ).classList.remove(
+    "show"
+  );
+
+  createRoster(
+    fieldingRoster,
+    "fieldingRoster",
+    selectedFielders
+  );
+
+  createRoster(
+    pitchingRoster,
+    "pitchingRoster",
+    selectedPitchers
+  );
+
+  updateTeam();
+
+}
+
+
+/* =========================================================
+   SIMULATION
+========================================================= */
+
+function playGame() {
+
+  const button =
+    document.getElementById(
+      "playButton"
+    );
+
+  if (
+    Object.keys(selectedFielders).length +
+    Object.keys(selectedPitchers).length
+    !== TOTAL_SLOTS
+  ) {
+    return;
+  }
+
+  button.disabled = true;
+  button.textContent =
+    "SIMULATING...";
+
+  document.getElementById(
+    "result"
+  ).classList.remove(
+    "show"
+  );
+
+
+  setTimeout(
+    function() {
+
+      const field =
+        getFieldRatings();
+
+      const pitch =
+        getPitchRatings();
+
+
+      const yourField =
+        (
+          field.power +
+          field.contact +
+          field.defense +
+          field.speed +
+          field.clutch
+        ) / 5;
+
+
+      const yourPitch =
+        (
+          pitch.velocity +
+          pitch.movement +
+          pitch.control +
+          pitch.strikeouts +
+          pitch.stamina +
+          pitch.clutch
+        ) / 6;
+
+
+      const opponentField =
+        (
+          currentChampion.field.power +
+          currentChampion.field.contact +
+          currentChampion.field.defense +
+          currentChampion.field.speed +
+          currentChampion.field.clutch
+        ) / 5;
+
+
+      const opponentPitch =
+        (
+          currentChampion.pitching.velocity +
+          currentChampion.pitching.movement +
+          currentChampion.pitching.control +
+          currentChampion.pitching.strikeouts +
+          currentChampion.pitching.stamina +
+          currentChampion.pitching.clutch
+        ) / 6;
+
+
+      /*
+         The current simulation is intentionally
+         a prototype. Random variance prevents the
+         higher-rated team from automatically winning.
+      */
+
+      const yourStrength =
+        yourField * .55 +
+        yourPitch * .45;
+
+      const opponentStrength =
+        opponentField * .55 +
+        opponentPitch * .45;
+
+
+      const variance =
+        (
+          Math.random() * 12
+        ) - 6;
+
+
+      const margin =
+        Math.round(
+          yourStrength -
+          opponentStrength +
+          variance
+        );
+
+
+      const youWin =
+        margin > 0;
+
+
+      /*
+         Generate a believable prototype score.
+      */
+
+      const baseRuns =
+        3 +
+        Math.random() * 4;
+
+      let yourRuns =
+        Math.max(
+          0,
+          Math.round(
+            baseRuns +
+            margin * .18 +
+            Math.random() * 2
+          )
+        );
+
+      let opponentRuns =
+        Math.max(
+          0,
+          Math.round(
+            baseRuns -
+            margin * .14 +
+            Math.random() * 2
+          )
+        );
+
+
+      if (
+        yourRuns === opponentRuns
+      ) {
+
+        if (youWin) {
+          yourRuns++;
+        } else {
+          opponentRuns++;
+        }
+
+      }
+
+
+      document.getElementById(
+        "resultTitle"
+      ).textContent =
+        youWin
+          ? "YOU BEAT THE GREATEST"
+          : "THE CHAMPIONS WIN";
+
+
+      document.getElementById(
+        "resultScore"
+      ).textContent =
+        yourRuns +
+        " – " +
+        opponentRuns;
+
+
+      document.getElementById(
+        "resultMessage"
+      ).textContent =
+        youWin
+          ? "Your historical roster defeated the " +
+            currentChampion.year +
+            " " +
+            currentChampion.team +
+            "."
+          : "The " +
+            currentChampion.year +
+            " " +
+            currentChampion.team +
+            " survived the challenge.";
+
+
+      document.getElementById(
+        "resultField"
+      ).textContent =
+        Math.round(
+          yourField
+        );
+
+
+      document.getElementById(
+        "resultPitch"
+      ).textContent =
+        Math.round(
+          yourPitch
+        );
+
+
+      document.getElementById(
+        "resultOpponent"
+      ).textContent =
+        Math.round(
+          opponentStrength
+        );
+
+
+      document.getElementById(
+        "resultMargin"
+      ).textContent =
+        (
+          margin >= 0
+            ? "+"
+            : ""
+        ) +
+        margin;
+
+
+      document.getElementById(
+        "result"
+      ).classList.add(
+        "show"
+      );
+
+
+      document.getElementById(
+        "result"
+      ).scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
+
+
+      button.disabled =
+        false;
+
+      button.textContent =
+        "PLAY AGAIN";
+
+    },
+    900
+  );
+
+}
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+buildTeamSelector();
+
+currentChampion =
+  championshipTeams[
+    Math.floor(
+      Math.random() *
+      championshipTeams.length
+    )
+  ];
+
+document.getElementById(
+  "teamSelect"
+).value =
+  championshipTeams.indexOf(
+    currentChampion
+  );
+
+setupChallenge();
+
+createRoster(
+  fieldingRoster,
+  "fieldingRoster",
+  selectedFielders
+);
+
+createRoster(
+  pitchingRoster,
+  "pitchingRoster",
+  selectedPitchers
+);
+
+updateTeam();
+
+drawRadar();
+
+</script>
+
+</body>
+</html>
