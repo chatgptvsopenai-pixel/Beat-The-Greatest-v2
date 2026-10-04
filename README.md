@@ -1,1 +1,1 @@
-# Beat-The-Greatest-v2
+Beat-The-Greatest-v2
