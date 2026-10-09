@@ -1,542 +1,614 @@
+
 <!DOCTYPE html>
 <html lang="en">
- <head>
-  <meta charset="utf-8"/>
-  <meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/>
-  <title>
-   Beat the Greatest
-  </title>
-  <style>
-      :root {
-     --bg:#070b10;
-     --panel:#0d131b;
-     --panel2:#101923;
-     --line:#253140;
-     --muted:#778496;
-     --text:#edf3f8;
-     --green:#20d878;
-     --blue:#3e8cff;
-     --gold:#ffd166;
-     --red:#ff5d73
-   }
-   * {
-     box-sizing:border-box
-   }
-   body {
-     margin:0;
-     background:radial-gradient(circle at 50% -10%,#182536 0,#070b10 48%);
-     color:var(--text);
-     font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif
-   }
-   .app {
-     width:min(760px,100%);
-     margin:auto;
-     padding:12px 10px 30px
-   }
-   .header {
-     text-align:center;
-     padding:10px 0 12px
-   }
-   .header h1 {
-     margin:0;
-     font-size:24px;
-     letter-spacing:2px
-   }
-   .header p {
-     margin:5px 0 0;
-     color:var(--muted);
-     font-size:11px
-   }
-   .challenge,.panel,.game,.radar-panel {
-     background:rgba(13,19,27,.94);
-     border:1px solid var(--line);
-     border-radius:17px;
-     box-shadow:0 10px 30px #0005
-   }
-   .challenge {
-     display:flex;
-     justify-content:space-between;
-     align-items:center;
-     padding:11px 13px
-   }
-   .challenge-label,.eyebrow {
-     font-size:8px;
-     text-transform:uppercase;
-     letter-spacing:1.4px;
-     color:var(--muted)
-   }
-   .challenge-name {
-     font-size:16px;
-     font-weight:900;
-     margin-top:3px
-   }
-   .team-logo {
-     width:48px;
-     height:48px;
-     border-radius:12px;
-     object-fit:contain;
-     background:#fff;
-     padding:5px
-   }
-   .radar-panel {
-     margin-top:9px;
-     padding:5px 8px 10px
-   }
-   .radar {
-     width:100%;
-     height:330px;
-     display:block
-   }
-   .legend {
-     display:flex;
-     justify-content:center;
-     gap:18px;
-     color:var(--muted);
-     font-size:9px
-   }
-   .legend i {
-     display:inline-block;
-     width:9px;
-     height:9px;
-     border-radius:2px;
-     margin-right:5px;
-     vertical-align:-1px
-   }
-   .legend .b {
-     background:var(--blue)
-   }
-   .legend .g {
-     border:1px dashed var(--green)
-   }
-   .mode {
-     display:grid;
-     grid-template-columns:1fr 1fr;
-     gap:7px;
-     margin-top:9px
-   }
-   .mode button,.action,.game-controls button {
-     border:0;
-     border-radius:10px;
-     padding:10px;
-     background:#17212d;
-     color:#cbd4df;
-     font-weight:900;
-     font-size:9px
-   }
-   .mode .active {
-     background:var(--green);
-     color:#06120b
-   }
-   .panel {
-     margin-top:9px;
-     padding:10px
-   }
-   .panel-title {
-     display:flex;
-     justify-content:space-between;
-     align-items:center;
-     margin-bottom:8px
-   }
-   .panel-title strong {
-     font-size:10px;
-     letter-spacing:1px
-   }
-   .panel-title span {
-     font-size:8px;
-     color:var(--muted)
-   }
-   .opponent-roster {
-     display:grid;
-     grid-template-columns:repeat(5,1fr);
-     gap:6px;
-     overflow:hidden
-   }
-   .mini {
-     background:#101822;
-     border:1px solid #263240;
-     border-radius:10px;
-     padding:5px;
-     text-align:center;
-     min-width:0
-   }
-   .mini img {
-     width:36px;
-     height:36px;
-     border-radius:50%;
-     object-fit:cover;
-     background:#1a2430;
-     border:1px solid #354253
-   }
-   .mini .n {
-     font-size:7px;
-     font-weight:900;
-     white-space:nowrap;
-     overflow:hidden;
-     text-overflow:ellipsis;
-     margin-top:3px
-   }
-   .mini .p {
-     font-size:6px;
-     color:var(--muted);
-     margin-top:2px
-   }
-   .draft {
-     margin-top:9px
-   }
-   .draft-head {
-     display:flex;
-     justify-content:space-between;
-     align-items:end;
-     margin-bottom:8px
-   }
-   .draft-head h2 {
-     font-size:18px;
-     margin:3px 0 0
-   }
-   .progress {
-     font-size:10px;
-     color:var(--green);
-     font-weight:900
-   }
-   .cards {
-     display:grid;
-     grid-template-columns:1fr 1fr;
-     gap:8px
-   }
-   .card {
-     display:flex;
-     align-items:center;
-     gap:8px;
-     min-height:78px;
-     padding:8px;
-     background:#101822;
-     border:1px solid #293544;
-     border-radius:14px;
-     cursor:pointer
-   }
-   .card.selected {
-     border-color:var(--green);
-     background:#102318
-   }
-   .card img {
-     width:48px;
-     height:48px;
-     min-width:48px;
-     border-radius:50%;
-     object-fit:cover;
-     background:#18222d;
-     border:1px solid #3a4758
-   }
-   .card .name {
-     font-size:11px;
-     font-weight:900;
-     line-height:1.1
-   }
-   .card .meta {
-     font-size:8px;
-     color:var(--muted);
-     margin-top:4px
-   }
-   .card .stats {
-     font-size:8px;
-     color:#66a8ff;
-     margin-top:3px
-   }
-   .check {
-     margin-left:auto;
-     color:var(--green);
-     font-weight:900
-   }
-   .controls {
-     display:flex;
-     gap:7px;
-     margin-top:8px
-   }
-   .back {
-     width:28%
-   }
-   .next {
-     flex:1;
-     background:var(--green)!important;
-     color:#06120b!important
-   }
-   .roster-scroll {
-     display:flex;
-     gap:6px;
-     overflow-x:auto
-   }
-   .chip {
-     min-width:75px;
-     padding:6px;
-     background:#101822;
-     border:1px solid #263240;
-     border-radius:9px;
-     text-align:center
-   }
-   .chip img {
-     width:27px;
-     height:27px;
-     border-radius:50%;
-     object-fit:cover
-   }
-   .chip .pos {
-     font-size:7px;
-     color:var(--muted)
-   }
-   .chip .nm {
-     font-size:8px;
-     font-weight:900;
-     white-space:nowrap;
-     overflow:hidden;
-     text-overflow:ellipsis
-   }
-   .game {
-     margin-top:10px;
-     padding:13px
-   }
-   .inning {
-     text-align:center;
-     color:var(--green);
-     font-size:10px;
-     font-weight:900;
-     letter-spacing:1.4px
-   }
-   .scoreboard {
-     display:grid;
-     grid-template-columns:1fr 45px 1fr;
-     text-align:center;
-     align-items:center;
-     margin:10px 0
-   }
-   .team {
-     font-size:8px;
-     color:var(--muted)
-   }
-   .score {
-     font-size:30px;
-     font-weight:900;
-     margin-top:2px
-   }
-   .play {
-     min-height:82px;
-     background:#111923;
-     border:1px solid #263240;
-     border-radius:12px;
-     padding:11px;
-     font-size:11px;
-     line-height:1.45
-   }
-   .game-controls {
-     display:grid;
-     grid-template-columns:1fr 1fr;
-     gap:7px;
-     margin-top:8px
-   }
-   .simulate {
-     grid-column:1/-1;
-     background:var(--green)!important;
-     color:#06120b!important
-   }
-   .hidden {
-     display:none!important
-   }
-   .final {
-     margin-top:10px;
-     padding:12px;
-     border:1px solid var(--gold);
-     border-radius:12px;
-     background:#201a0c;
-     text-align:center;
-     color:#ffe9a6
-   }
-   .log {
-     margin-top:8px;
-     max-height:170px;
-     overflow:auto;
-     border-top:1px solid #253140;
-     padding-top:6px;
-     color:#9ca9b8;
-     font-size:9px
-   }
-   .log div {
-     padding:3px 0;
-     border-bottom:1px solid #18212c
-   }
-   @media(max-width:500px) {
-     .cards {
-       grid-template-columns:1fr
-     }
-     .radar {
-       height:310px
-     }
-     .opponent-roster {
-       grid-template-columns:repeat(5,76px);
-       overflow-x:auto
-     }
-   }
-   .game-action {
-     margin-top:10px;
-     background:#05090d;
-     border:2px solid #344555;
-     border-radius:12px;
-     overflow:hidden;
-     box-shadow:inset 0 0 0 1px #111a22,0 8px 20px #0007;
-     font-family:monospace
-   }
-   .action-top {
-     display:flex;
-     align-items:center;
-     justify-content:space-between;
-     padding:6px 8px;
-     background:#0b1219;
-     border-bottom:1px solid #25313d;
-     color:#7dffb2;
-     font-size:8px;
-     font-weight:900;
-     letter-spacing:1px
-   }
-   .sound-btn {
-     border:1px solid #344555;
-     background:#121c26;
-     border-radius:6px;
-     padding:4px 7px;
-     color:#fff;
-     font-size:11px;
-     cursor:pointer
-   }
-   .action-stage {
-     position:relative;
-     background:#071018
-   }
-   .action-canvas {
-     display:block;
-     width:100%;
-     height:154px;
-     image-rendering:pixelated;
-     image-rendering:crisp-edges
-   }
-   .action-teams {
-     position:absolute;
-     left:7px;
-     right:7px;
-     top:7px;
-     display:flex;
-     justify-content:space-between;
-     pointer-events:none
-   }
-   .action-team {
-     display:flex;
-     align-items:center;
-     gap:5px;
-     background:#05090dcc;
-     border:1px solid #344555;
-     border-radius:7px;
-     padding:3px 5px;
-     max-width:43%
-   }
-   .action-team img {
-     width:25px;
-     height:25px;
-     object-fit:contain;
-     background:#fff;
-     border-radius:4px;
-     padding:2px
-   }
-   .action-team.user img {
-     background:#172536
-   }
-   .action-team span {
-     font-size:7px;
-     font-weight:900;
-     white-space:nowrap;
-     overflow:hidden;
-     text-overflow:ellipsis
-   }
-   .action-matchup {
-     display:grid;
-     grid-template-columns:1fr 32px 1fr;
-     align-items:center;
-     gap:5px;
-     padding:6px 8px;
-     background:#091119;
-     border-top:1px solid #25313d
-   }
-   .action-player {
-     display:flex;
-     align-items:center;
-     gap:6px;
-     min-width:0
-   }
-   .action-player.right {
-     justify-content:flex-end;
-     text-align:right
-   }
-   .action-player img {
-     width:34px;
-     height:34px;
-     border-radius:50%;
-     object-fit:cover;
-     background:#172330;
-     border:1px solid #3b4c5d
-   }
-   .action-player strong {
-     display:block;
-     font-size:8px;
-     white-space:nowrap;
-     overflow:hidden;
-     text-overflow:ellipsis
-   }
-   .action-player small {
-     display:block;
-     color:#718093;
-     font-size:6px;
-     margin-top:2px
-   }
-   .action-vs {
-     text-align:center;
-     color:#526276;
-     font-size:7px;
-     font-weight:900
-   }
-   .action-caption {
-     text-align:center;
-     padding:6px 8px;
-     color:#ffd166;
-     background:#070d13;
-     font-size:9px;
-     font-weight:900;
-     letter-spacing:1px;
-     border-top:1px solid #25313d
-   }
-   .game-action.flash {
-     animation:actionFlash .22s steps(2,end)
-   }
-   @keyframes actionFlash {
-     50% {
-       filter:brightness(1.8)
-     }
-   }
-  </style>
- </head>
- <body>
-  <div class="app">
-   <div class="header">
-    <h1>
-     BEAT THE GREATEST
-    </h1>
-    <p>
-     Build a team. Beat baseball history.
-    </p>
-   </div>
-   <div class="challenge">
-    <div>
-     <div class="challenge-label">
-      Random championship opponent
-     </div>
-     <div class="challenge-name" id="opponentName">
-      Loading...
-     </div>
-     <div class="eyebrow" id="opponentSeason">
-     </div>
-    </div>
-    <img alt=""
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Beat the Greatest</title>
+<style>
+:root{--bg:#070b10;--panel:#0d131b;--line:#253140;--muted:#91a0b2;--text:#edf3f8;--green:#20d878;--blue:#3e8cff;--gold:#ffd166;--red:#ff5d73}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at 50% -10%,#182536,#070b10 55%);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,sans-serif}
+button,select{font:inherit}
+button{cursor:pointer}
+button:disabled{opacity:.4;cursor:not-allowed}
+.app{width:min(760px,100%);margin:auto;padding:12px 10px 32px}
+header{text-align:center;padding:10px 0 14px}
+h1{font-size:24px;letter-spacing:2px;margin:0}
+header p{font-size:11px;color:var(--muted);margin:5px 0}
+.box{background:rgba(13,19,27,.96);border:1px solid var(--line);border-radius:15px;padding:12px;margin-top:9px}
+.challenge{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.eyebrow{font-size:9px;text-transform:uppercase;letter-spacing:1.4px;color:var(--muted)}
+.team-name{font-size:17px;font-weight:900;margin:4px 0}
+.logo{width:48px;height:48px;object-fit:contain;background:#fff;border-radius:9px;padding:4px}
+.muted{color:var(--muted);font-size:10px}
+.radar{width:100%;height:310px;display:block}
+.legend{display:flex;justify-content:center;gap:15px;font-size:10px;color:var(--muted)}
+.legend span:before{content:"";display:inline-block;width:9px;height:9px;margin-right:5px;border-radius:2px;background:var(--blue)}
+.legend .mine:before{background:var(--green)}
+.row{display:flex;gap:7px}
+.row>*{flex:1;min-width:0}
+button,.select{border:1px solid #344354;background:#17212d;color:var(--text);border-radius:9px;padding:10px;font-size:11px;font-weight:800}
+.primary{background:var(--green);color:#06120b;border-color:var(--green)}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:9px}
+.tabs button.active{background:var(--green);color:#06120b}
+.panel-title{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:9px;font-size:11px;font-weight:900;letter-spacing:.7px}
+.roster{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}
+.player{min-width:0;background:#101822;border:1px solid #263240;border-radius:9px;padding:5px;text-align:center}
+.player img{width:35px;height:35px;border-radius:50%;object-fit:cover;background:#1b2633}
+.player b{display:block;font-size:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.player small{display:block;font-size:7px;color:var(--muted);margin-top:3px}
+.draft-title{font-size:18px;font-weight:900;margin:4px 0 10px}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.card{display:flex;align-items:center;gap:8px;text-align:left;min-height:68px;padding:8px;background:#101822;border:1px solid #293544;border-radius:12px;color:var(--text)}
+.card.selected{border-color:var(--green);background:#102318}
+.card img{width:42px;height:42px;min-width:42px;border-radius:50%;object-fit:cover;background:#18222d}
+.card b{font-size:10px;display:block}
+.card small{font-size:8px;color:var(--muted);display:block;margin-top:4px}
+.card .check{margin-left:auto;color:var(--green)}
+.controls{display:flex;gap:7px;margin-top:9px}
+.controls button:first-child{width:28%}
+.controls button:last-child{flex:1}
+.myroster{display:flex;gap:6px;overflow-x:auto}
+.chip{min-width:82px;background:#101822;border:1px solid #263240;border-radius:8px;padding:6px;text-align:center}
+.chip b{font-size:8px;display:block}
+.chip small{font-size:7px;color:var(--muted)}
+.game{margin-top:10px}
+.inning{text-align:center;color:var(--green);font-size:11px;font-weight:900;letter-spacing:1px}
+.scoreboard{display:grid;grid-template-columns:1fr 35px 1fr;text-align:center;align-items:center;margin:12px 0}
+.scoreboard small{display:block;color:var(--muted);font-size:9px}
+.score{font-size:32px;font-weight:900}
+.play{background:#111923;border:1px solid #263240;border-radius:10px;padding:12px;min-height:65px;font-size:12px;line-height:1.5}
+.gamecontrols{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px}
+.gamecontrols .primary{grid-column:1/-1}
+.log{max-height:180px;overflow:auto;margin-top:10px;border-top:1px solid var(--line);padding-top:7px;font-size:10px;color:#aab5c2}
+.log div{padding:4px 0;border-bottom:1px solid #18212c}
+.notice{font-size:10px;line-height:1.5;color:var(--muted);margin-top:8px}
+.status{font-size:10px;color:var(--gold);margin-top:7px}
+.hidden{display:none!important}
+.final{border:1px solid var(--gold);border-radius:10px;background:#201a0c;padding:12px;text-align:center;color:#ffe9a6;margin-top:10px}
+@media(max-width:500px){.cards{grid-template-columns:1fr}.roster{grid-template-columns:repeat(5,72px);overflow-x:auto}.radar{height:285px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+<h1>BEAT THE GREATEST</h1>
+<p>Build a team. Beat baseball history.</p>
+</header>
+
+<section class="box challenge">
+<div>
+<div class="eyebrow">Championship challenge</div>
+<div class="team-name" id="opponentName">Loading opponents…</div>
+<div class="muted" id="opponentSeason"></div>
+</div>
+<img class="logo" id="opponentLogo" alt="Team logo">
+</section>
+
+<section class="box">
+<div class="panel-title"><span>TEAM RATINGS</span><span id="ratingLabel">FIELDERS</span></div>
+<svg id="radar" class="radar" viewBox="0 0 400 310" role="img" aria-label="Team ratings radar chart"></svg>
+<div class="legend"><span>Opponent</span><span class="mine">Your team</span></div>
+<div class="tabs">
+<button id="fieldMode" class="active">FIELDERS</button>
+<button id="pitchMode">PITCHERS</button>
+</div>
+</section>
+
+<section class="box">
+<div class="panel-title"><span>CHAMPIONSHIP-SEASON ROSTER</span><span id="oppCount">Loading…</span></div>
+<div class="roster" id="opponentRoster"></div>
+<div class="notice" id="rosterNote">Retrieving the historical season roster from MLB Stats API.</div>
+<div class="row" style="margin-top:9px">
+<button id="newOpponent">NEW OPPONENT</button>
+<button id="retryRoster">RETRY ROSTER</button>
+</div>
+</section>
+
+<section class="box" id="draftArea">
+<div class="eyebrow">Your all-time draft</div>
+<div class="draft-title" id="draftTitle">Choose Your Catcher</div>
+<div class="panel-title"><span id="draftPosition">CATCHER</span><span id="progress">0 / 27</span></div>
+<div class="cards" id="cards"></div>
+<div class="controls">
+<button id="backBtn">BACK</button>
+<button class="primary" id="nextBtn">NEXT PICK</button>
+</div>
+<div class="notice">Choose one player for each roster slot. The draft pool is built into this file; the championship roster is retrieved separately.</div>
+</section>
+
+<section class="box">
+<div class="panel-title"><span>YOUR ROSTER</span><span id="myRosterCount">0 / 27</span></div>
+<div class="myroster" id="myRoster"><span class="muted">Your selections will appear here.</span></div>
+</section>
+
+<section class="box game hidden" id="game">
+<div class="inning" id="inningDisplay">TOP 1ST</div>
+<div class="scoreboard">
+<div><small>YOUR TEAM</small><div class="score" id="userScore">0</div></div>
+<div>—</div>
+<div><small id="gameOpponentLabel">OPPONENT</small><div class="score" id="oppScore">0</div></div>
+</div>
+<div class="play" id="playByPlay">First pitch coming up.</div>
+<div class="gamecontrols">
+<button class="primary" id="simulateBtn">SIMULATE HALF-INNING</button>
+<button id="benchBtn">USE BENCH</button>
+<button id="relieverBtn">BRING IN RELIEVER</button>
+</div>
+<div class="log" id="gameLog"></div>
+<div id="finalBox"></div>
+</section>
+
+<div class="status" id="status" role="status" aria-live="polite"></div>
+</div>
+
+<script>
+"use strict";
+
+/* Championship seasons. Team IDs are MLB Stats API franchise/team IDs. */
+const CHAMPIONS = [
+ {name:"1986 New York Mets",year:1986,id:121,record:"108–54"},
+ {name:"1998 New York Yankees",year:1998,id:147,record:"114–48"},
+ {name:"2004 Boston Red Sox",year:2004,id:111,record:"98–64"},
+ {name:"2016 Chicago Cubs",year:2016,id:112,record:"103–58"},
+ {name:"2020 Los Angeles Dodgers",year:2020,id:119,record:"43–17"},
+ {name:"2023 Texas Rangers",year:2023,id:140,record:"90–72"},
+ {name:"2024 Los Angeles Dodgers",year:2024,id:119,record:"98–64"},
+ {name:"1977 New York Yankees",year:1977,id:147,record:"100–62"},
+ {name:"1975 Cincinnati Reds",year:1975,id:113,record:"108–54"},
+ {name:"1969 New York Mets",year:1969,id:121,record:"100–62"},
+ {name:"1955 Brooklyn Dodgers",year:1955,id:119,record:"98–55"},
+ {name:"1927 New York Yankees",year:1927,id:147,record:"110–44"}
+];
+
+const rosterSlots = [
+ "Catcher","First Base","Second Base","Shortstop","Third Base",
+ "Left Field","Center Field","Right Field","Designated Hitter",
+ "Bench 1","Bench 2","Bench 3","Bench 4",
+ "Starting Pitcher 1","Starting Pitcher 2","Starting Pitcher 3",
+ "Starting Pitcher 4","Starting Pitcher 5",
+ "Reliever 1","Reliever 2","Reliever 3","Reliever 4","Reliever 5",
+ "Closer","Utility 1","Utility 2","Utility 3"
+];
+
+/* Name, peak season, ratings: power, contact, defense, speed, clutch,
+   velocity, movement, control, strikeouts, stamina, pitching clutch. */
+const pool = {
+ "Catcher":[
+  ["Johnny Bench",1972,[96,93,98,75,96]],["Yogi Berra",1950,[90,96,91,68,98]],
+  ["Mike Piazza",1997,[99,97,75,67,94]],["Ivan Rodriguez",1999,[84,90,99,83,91]],
+  ["Gary Carter",1982,[88,90,96,75,94]],["Buster Posey",2012,[88,96,93,72,95]]
+ ],
+ "First Base":[
+  ["Lou Gehrig",1927,[99,99,91,86,99]],["Albert Pujols",2009,[99,98,88,72,98]],
+  ["Jimmie Foxx",1932,[99,96,88,82,97]],["Mark McGwire",1998,[100,90,80,55,95]],
+  ["Miguel Cabrera",2013,[97,99,80,60,96]],["Joey Votto",2017,[91,98,86,65,95]]
+ ],
+ "Second Base":[
+  ["Rogers Hornsby",1924,[99,99,85,80,97]],["Joe Morgan",1975,[86,96,96,96,98]],
+  ["Jackie Robinson",1949,[82,97,95,95,99]],["Roberto Alomar",1999,[80,93,95,93,94]],
+  ["Ryne Sandberg",1990,[88,91,97,89,93]],["Nap Lajoie",1901,[83,96,93,80,93]]
+ ],
+ "Shortstop":[
+  ["Honus Wagner",1908,[90,99,97,91,98]],["Cal Ripken Jr.",1991,[90,95,95,70,96]],
+  ["Alex Rodriguez",2000,[98,97,91,88,96]],["Derek Jeter",1999,[88,97,84,84,98]],
+  ["Ernie Banks",1959,[97,93,84,72,95]],["Ozzie Smith",1987,[60,88,100,94,94]]
+ ],
+ "Third Base":[
+  ["Mike Schmidt",1980,[99,94,99,75,98]],["Eddie Mathews",1953,[96,91,89,78,94]],
+  ["George Brett",1980,[91,98,91,84,98]],["Adrian Beltre",2004,[91,94,99,72,95]],
+  ["Chipper Jones",1999,[94,98,87,79,96]],["Brooks Robinson",1964,[76,91,100,75,95]]
+ ],
+ "Left Field":[
+  ["Barry Bonds",2001,[100,99,91,91,99]],["Ted Williams",1941,[99,100,83,76,99]],
+  ["Rickey Henderson",1985,[82,96,89,100,98]],["Manny Ramirez",1999,[99,97,73,60,96]],
+  ["Stan Musial",1948,[96,99,89,80,98]],["Ralph Kiner",1949,[99,91,76,65,94]]
+ ],
+ "Center Field":[
+  ["Willie Mays",1954,[97,98,99,96,99]],["Mickey Mantle",1956,[100,98,92,94,99]],
+  ["Ty Cobb",1911,[84,99,91,98,98]],["Ken Griffey Jr.",1997,[99,96,97,90,97]],
+  ["Joe DiMaggio",1939,[91,98,96,84,98]],["Tris Speaker",1912,[81,98,99,83,95]]
+ ],
+ "Right Field":[
+  ["Babe Ruth",1923,[100,99,82,82,100]],["Hank Aaron",1959,[98,98,91,86,99]],
+  ["Frank Robinson",1966,[98,96,91,82,98]],["Roberto Clemente",1967,[88,95,99,91,97]],
+  ["Larry Walker",1997,[97,98,96,87,96]],["Ichiro Suzuki",2004,[65,99,97,99,95]]
+ ],
+ "Designated Hitter":[
+  ["Edgar Martinez",1995,[92,99,72,62,97]],["David Ortiz",2007,[98,96,60,48,99]],
+  ["Frank Thomas",1994,[99,99,73,57,96]],["Shohei Ohtani",2024,[100,98,80,95,99]],
+  ["Jim Thome",2002,[99,92,70,50,95]],["Paul Molitor",1987,[84,98,80,85,96]]
+ ],
+ "Bench 1":[
+  ["Pete Rose",1973,[78,98,82,83,96]],["Tony Gwynn",1994,[72,100,89,80,98]],
+  ["Reggie Jackson",1969,[97,90,79,81,95]],["Paul Waner",1927,[76,98,85,82,95]]
+ ],
+ "Bench 2":[
+  ["Al Kaline",1955,[88,96,97,84,95]],["Vladimir Guerrero",2000,[98,96,78,82,96]],
+  ["Duke Snider",1954,[97,94,87,82,95]],["Jim Rice",1978,[97,94,77,69,96]]
+ ],
+ "Bench 3":[
+  ["Joe Morgan",1975,[86,96,96,96,98]],["Ozzie Smith",1987,[60,88,100,94,94]],
+  ["Ichiro Suzuki",2004,[65,99,97,99,95]],["Mookie Betts",2018,[93,98,97,91,97]]
+ ],
+ "Bench 4":[
+  ["Eddie Murray",1984,[91,96,88,69,97]],["Rod Carew",1977,[75,99,86,84,96]],
+  ["Carl Yastrzemski",1967,[92,97,95,79,99]],["Paul Molitor",1987,[84,98,80,85,96]]
+ ],
+ "Starting Pitcher 1":[
+  ["Walter Johnson",1913,[98,99,95,99,99,98]],["Pedro Martinez",2000,[98,99,98,99,91,97]],
+  ["Randy Johnson",1995,[99,98,92,99,97,94]],["Greg Maddux",1995,[88,99,100,90,98,98]],
+  ["Sandy Koufax",1965,[99,99,94,99,96,99]],["Roger Clemens",1997,[99,98,96,99,96,98]]
+ ],
+ "Starting Pitcher 2":[
+  ["Cy Young",1901,[94,97,99,91,100,98]],["Tom Seaver",1973,[95,96,95,97,96,97]],
+  ["Bob Gibson",1968,[98,99,97,99,98,100]],["Steve Carlton",1972,[95,98,91,99,96,96]],
+  ["Justin Verlander",2011,[98,96,94,98,96,94]],["Max Scherzer",2017,[97,97,94,99,94,94]]
+ ],
+ "Starting Pitcher 3":[
+  ["Christy Mathewson",1909,[92,97,99,94,99,98]],["Lefty Grove",1931,[99,97,92,99,96,97]],
+  ["Nolan Ryan",1973,[100,91,87,100,95,97]],["Roy Halladay",2010,[94,98,98,96,98,97]]
+ ],
+ "Starting Pitcher 4":[
+  ["Fergie Jenkins",1971,[92,96,97,95,98,96]],["Mariano Rivera",1996,[96,100,100,99,90,100]],
+  ["John Smoltz",1996,[96,97,94,98,91,95]],["Clayton Kershaw",2014,[98,99,98,98,97,98]]
+ ],
+ "Starting Pitcher 5":[
+  ["Bob Feller",1940,[99,92,91,99,96,96]],["Warren Spahn",1953,[91,97,97,91,99,97]],
+  ["Roy Oswalt",2002,[94,96,94,96,94,94]],["CC Sabathia",2007,[96,96,93,96,98,95]]
+ ],
+ "Reliever 1":[
+  ["Dennis Eckersley",1990,[92,99,98,96,88,98]],["Goose Gossage",1977,[98,95,91,98,94,96]],
+  ["Billy Wagner",1999,[100,99,96,99,85,96]],["Hoyt Wilhelm",1959,[78,99,100,94,90,98]]
+ ],
+ "Reliever 2":[
+  ["Rollie Fingers",1981,[91,98,96,95,90,98]],["Bruce Sutter",1977,[91,99,97,96,88,97]],
+  ["Andrew Miller",2016,[98,99,95,99,87,94]],["Lee Smith",1991,[97,96,91,98,92,95]]
+ ],
+ "Reliever 3":[
+  ["Trevor Hoffman",1998,[94,99,97,97,89,97]],["Joe Nathan",2006,[96,97,95,98,89,96]],
+  ["Jonathan Papelbon",2006,[96,97,95,98,88,96]],["Aroldis Chapman",2012,[100,98,91,100,86,96]]
+ ],
+ "Reliever 4":[
+  ["Sparky Lyle",1977,[88,97,94,94,91,95]],["Tug McGraw",1973,[88,95,93,94,94,96]],
+  ["Billy Pierce",1955,[88,97,96,92,97,95]],["Eric Gagne",2003,[98,99,96,99,85,98]]
+ ],
+ "Reliever 5":[
+  ["Kent Tekulve",1979,[80,98,98,90,92,96]],["John Franco",1989,[86,97,96,94,90,96]],
+  ["Francisco Rodriguez",2004,[98,97,94,99,87,97]],["Robb Nen",2000,[98,97,94,99,88,97]]
+ ],
+ "Closer":[
+  ["Mariano Rivera",2004,[97,100,100,99,90,100]],["Trevor Hoffman",1998,[94,99,97,97,89,97]],
+  ["Billy Wagner",1999,[100,99,96,99,85,96]],["Dennis Eckersley",1992,[92,99,99,96,89,98]]
+ ],
+ "Utility 1":[
+  ["Babe Ruth",1923,[100,99,82,82,100]],["Mickey Mantle",1956,[100,98,92,94,99]],
+  ["Jackie Robinson",1949,[82,97,95,95,99]],["Willie Mays",1954,[97,98,99,96,99]]
+ ],
+ "Utility 2":[
+  ["Ted Williams",1941,[99,100,83,76,99]],["Hank Aaron",1959,[98,98,91,86,99]],
+  ["Barry Bonds",2001,[100,99,91,91,99]],["Lou Gehrig",1927,[99,99,91,86,99]]
+ ],
+ "Utility 3":[
+  ["Albert Pujols",2009,[99,98,88,72,98]],["Ken Griffey Jr.",1997,[99,96,97,90,97]],
+  ["Frank Thomas",1994,[99,99,73,57,96]],["Roberto Clemente",1967,[88,95,99,91,97]]
+ ]
+};
+
+const state={
+ opponent:null,opponentRoster:[],selected:{},pick:0,mode:"field",
+ game:null,usedBench:[],relieverUsed:false
+};
+const $=id=>document.getElementById(id);
+const API="https://statsapi.mlb.com/api/v1";
+const logoUrl=id=>`https://www.mlbstatic.com/team-logos/team-cap-on-light/${id}.svg`;
+const headshot=id=>`https://img.mlbstatic.com/mlb-photos/image/upload/w_120,q_70/v1/people/${id}/headshot/67/current`;
+const fallback=(name="Player")=>"data:image/svg+xml;charset=UTF-8,"+encodeURIComponent(
+ `<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80"><rect width="80" height="80" rx="40" fill="#263748"/><text x="40" y="48" text-anchor="middle" font-size="26" fill="#dce8f3" font-family="Arial">${String(name).slice(0,1).replace(/[<&]/g,"")}</text></svg>`
+);
+function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function imgError(img){img.onerror=null;img.src=fallback(img.alt);}
+function clamp(n,min=0,max=100){return Math.max(min,Math.min(max,Number(n)||0));}
+function average(arr,index){const vals=arr.filter(Boolean).map(p=>p.ratings?.[index]??70);return vals.length?vals.reduce((a,b)=>a+b,0)/vals.length:0;}
+function selectedPlayers(){return Object.values(state.selected);}
+function currentSlot(){return rosterSlots[state.pick];}
+function positionPool(slot){return pool[slot]||pool["Utility 1"];}
+function candidateList(slot){
+ const picked=selectedPlayers().map(p=>p.name);
+ let options=positionPool(slot);
+ return options.filter(p=>!picked.includes(p[0])).concat(options.filter(p=>picked.includes(p[0]))).slice(0,4);
+}
+function cardRatings(p,slot){
+ const pitcher=/Pitcher|Reliever|Closer/.test(slot);
+ const raw=p[2]||[];
+ if(pitcher)return raw.length>=6?raw:[raw[0]||70,raw[1]||70,raw[2]||70,raw[3]||70,raw[4]||70,raw[5]||70];
+ return raw.slice(0,5);
+}
+function makePlayer(p,slot){
+ return {name:p[0],year:p[1],ratings:cardRatings(p,slot),slot,mlbId:null,photo:null};
+}
+function renderDraft(){
+ const slot=currentSlot();
+ $("draftTitle").textContent="Choose Your "+slot;
+ $("draftPosition").textContent=slot.toUpperCase();
+ $("progress").textContent=`${Object.keys(state.selected).length} / ${rosterSlots.length}`;
+ $("backBtn").disabled=state.pick===0;
+ $("nextBtn").textContent=state.pick===rosterSlots.length-1?"START GAME":"NEXT PICK";
+ $("cards").innerHTML="";
+ candidateList(slot).forEach((p,i)=>{
+  const player=makePlayer(p,slot);
+  const card=document.createElement("button");
+  card.className="card"+(state.selected[slot]?.name===p[0]?" selected":"");
+  card.innerHTML=`<img src="${fallback(p[0])}" alt="" onerror="imgError(this)"><span><b>${esc(p[0])}</b><small>Peak season: ${p[1]}</small></span>${state.selected[slot]?.name===p[0]?'<span class="check">✓</span>':""}`;
+  card.onclick=()=>{
+   state.selected[slot]=player;
+   renderDraft();renderMyRoster();drawRadar();
+  };
+  $("cards").appendChild(card);
+ });
+}
+function renderMyRoster(){
+ const roster=selectedPlayers();
+ $("myRosterCount").textContent=`${roster.length} / ${rosterSlots.length}`;
+ $("myRoster").innerHTML="";
+ if(!roster.length){$("myRoster").innerHTML='<span class="muted">Your selections will appear here.</span>';return;}
+ roster.forEach(p=>{
+  const el=document.createElement("div");el.className="chip";
+  el.innerHTML=`<b>${esc(p.name)}</b><small>${esc(p.slot)}</small>`;
+  $("myRoster").appendChild(el);
+ });
+}
+function point(cx,cy,r,i,n,value=100){
+ const a=-Math.PI/2+i*2*Math.PI/n,rr=r*clamp(value)/100;
+ return [cx+Math.cos(a)*rr,cy+Math.sin(a)*rr];
+}
+function polygon(cx,cy,r,values){
+ return values.map((v,i)=>point(cx,cy,r,i,values.length,v).map(n=>n.toFixed(1)).join(",")).join(" ");
+}
+function drawRadar(){
+ const svg=$("radar"),pitch=state.mode==="pitch",labels=pitch?
+ ["Velocity","Movement","Control","Strikeouts","Stamina","Clutch"]:
+ ["Power","Contact","Defense","Speed","Clutch"];
+ const n=labels.length,cx=200,cy=145,r=105;
+ const opp=labels.map((_,i)=>pitch?[92,91,90,94,91,92][i]:[91,93,94,87,92][i]);
+ const players=selectedPlayers().filter(p=>pitch===/Pitcher|Reliever|Closer/.test(p.slot));
+ const vals=labels.map((_,i)=>average(players,i));
+ let html="";
+ for(let v=20;v<=100;v+=20)html+=`<polygon points="${polygon(cx,cy,r,Array(n).fill(v))}" fill="none" stroke="#2a3b4e"/>`;
+ labels.forEach((lab,i)=>{
+  const [x,y]=point(cx,cy,r,i,n);
+  const [lx,ly]=point(cx,cy,r+22,i,n);
+  html+=`<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="#34475a"/>`;
+  html+=`<text x="${lx}" y="${ly}" fill="#9baabc" font-size="9" text-anchor="middle" dominant-baseline="middle">${lab}</text>`;
+ });
+ html+=`<polygon points="${polygon(cx,cy,r,opp)}" fill="#3e8cff30" stroke="#3e8cff" stroke-width="2"/>`;
+ if(players.length)html+=`<polygon points="${polygon(cx,cy,r,vals)}" fill="#20d87835" stroke="#20d878" stroke-width="2"/>`;
+ html+=`<text x="${cx}" y="${cy+5}" text-anchor="middle" fill="#edf3f8" font-size="18" font-weight="bold">${players.length?Math.round(vals.reduce((a,b)=>a+b,0)/n):"—"}</text>`;
+ svg.innerHTML=html;$("ratingLabel").textContent=pitch?"PITCHERS":"FIELDERS";
+}
+function randomOpponent(exclude){
+ const options=CHAMPIONS.filter(t=>t.name!==exclude);
+ return options[Math.floor(Math.random()*options.length)];
+}
+function setStatus(msg){$("status").textContent=msg;}
+function uniqueById(players){
+ const seen=new Set();
+ return players.filter(p=>{const id=p.person?.id||p.id;if(!id||seen.has(id))return false;seen.add(id);return true;});
+}
+async function fetchJSON(url){
+ const res=await fetch(url);
+ if(!res.ok)throw new Error("MLB Stats API returned HTTP "+res.status);
+ return res.json();
+}
+async function loadOpponentRoster(){
+ const team=state.opponent;
+ $("opponentName").textContent=team.name;
+ $("opponentSeason").textContent=`${team.year} champions • ${team.record} regular-season record`;
+ $("opponentLogo").src=logoUrl(team.id);
+ $("opponentLogo").onerror=()=>{$("opponentLogo").onerror=null;$("opponentLogo").src=fallback(team.name);};
+ $("opponentRoster").innerHTML="";
+ $("oppCount").textContent="Loading…";
+ $("rosterNote").textContent="Requesting the selected team's full roster for its championship season…";
+ setStatus("Loading historical roster…");
+ try{
+  const data=await fetchJSON(`${API}/teams/${team.id}/roster?rosterType=fullRoster&season=${team.year}`);
+  let roster=uniqueById(data.roster||[]);
+  if(!roster.length)throw new Error("The API returned no players for this season.");
+  roster=roster.slice(0,27);
+  state.opponentRoster=roster.map(p=>({
+   id:p.person.id,name:p.person.fullName,position:p.position?.abbreviation||"—",
+   photo:headshot(p.person.id)
+  }));
+  renderOpponentRoster();
+  $("oppCount").textContent=`${state.opponentRoster.length} players`;
+  $("rosterNote").textContent=state.opponentRoster.length===27?
+   "Twenty-seven unique players returned by the historical season-roster request.":
+   `The API returned ${state.opponentRoster.length} unique players. The available data did not provide twenty-seven; no unrelated players were added.`;
+  setStatus("Historical roster loaded.");
+ }catch(err){
+  state.opponentRoster=[];
+  $("oppCount").textContent="Unavailable";
+  $("rosterNote").textContent="Could not retrieve this historical roster. Check your connection or try again. "+err.message;
+  $("opponentRoster").innerHTML='<div class="muted">Roster unavailable. No fictional players have been substituted.</div>';
+  setStatus("Roster request failed.");
+ }
+}
+function renderOpponentRoster(){
+ const root=$("opponentRoster");root.innerHTML="";
+ state.opponentRoster.forEach(p=>{
+  const el=document.createElement("div");el.className="player";
+  el.innerHTML=`<img src="${p.photo}" alt="${esc(p.name)}"><b>${esc(p.name)}</b><small>${esc(p.position)}</small>`;
+  el.querySelector("img").onerror=function(){imgError(this);};
+  root.appendChild(el);
+ });
+}
+function changeMode(mode){
+ state.mode=mode;
+ $("fieldMode").classList.toggle("active",mode==="field");
+ $("pitchMode").classList.toggle("active",mode==="pitch");
+ drawRadar();
+}
+function goBack(){
+ if(state.pick>0){state.pick--;renderDraft();}
+}
+function nextPick(){
+ const slot=currentSlot();
+ if(!state.selected[slot]){setStatus("Choose a player for "+slot+" first.");return;}
+ if(state.pick<rosterSlots.length-1){state.pick++;renderDraft();return;}
+ if(Object.keys(state.selected).length!==rosterSlots.length){setStatus("Complete all twenty-seven roster slots first.");return;}
+ startGame();
+}
+function startGame(){
+ state.game={inning:1,half:"top",outs:0,balls:0,strikes:0,bases:[false,false,false],user:0,opp:0,finished:false,userBatters:0,oppBatters:0,log:[]};
+ state.usedBench=[];state.relieverUsed=false;
+ $("game").classList.remove("hidden");
+ $("gameOpponentLabel").textContent=state.opponent.name;
+ $("finalBox").innerHTML="";$("gameLog").innerHTML="";
+ $("playByPlay").textContent="First pitch. The game is underway.";
+ $("simulateBtn").disabled=false;
+ updateGameUI();
+ $("game").scrollIntoView({behavior:"smooth",block:"start"});
+ setStatus("Game started. Simulate the first half-inning.");
+}
+function updateGameUI(){
+ const g=state.game;if(!g)return;
+ const half=g.half==="top"?"TOP":"BOTTOM";
+ const ord=g.inning===1?"1ST":g.inning===2?"2ND":g.inning===3?"3RD":g.inning+"TH";
+ $("inningDisplay").textContent=`${half} ${ord} • ${g.outs} OUT${g.outs===1?"":"S"}`;
+ $("userScore").textContent=g.user;$("oppScore").textContent=g.opp;
+}
+function logPlay(text){
+ const g=state.game;g.log.unshift(`${g.half.toUpperCase()} ${g.inning}: ${text}`);
+ $("gameLog").innerHTML=g.log.slice(0,70).map(x=>`<div>${esc(x)}</div>`).join("");
+}
+function offenseRoster(){
+ const players=selectedPlayers();
+ return players.filter(p=>!/Pitcher|Reliever|Closer/.test(p.slot));
+}
+function pitchingRoster(){
+ return selectedPlayers().filter(p=>/Pitcher|Reliever|Closer/.test(p.slot));
+}
+function offenseRating(){
+ const batters=offenseRoster();
+ return batters.length?batters.reduce((s,p)=>s+p.ratings[0]*.22+p.ratings[1]*.30+p.ratings[4]*.18+p.ratings[2]*.18+p.ratings[3]*.12,0)/batters.length:70;
+}
+function defenseRating(){
+ const fielders=offenseRoster();
+ return fielders.length?fielders.reduce((s,p)=>s+(p.ratings[2]||70),0)/fielders.length:70;
+}
+function pitchingRating(){
+ const ps=pitchingRoster();
+ return ps.length?ps.reduce((s,p)=>s+p.ratings.slice(0,5).reduce((a,b)=>a+b,0)/5,0)/ps.length:70;
+}
+function opponentRating(){
+ const roster=state.opponentRoster;
+ if(!roster.length)return 75;
+ return 72+Math.min(20,roster.length*.45);
+}
+function poisson(lambda){
+ const limit=Math.exp(-lambda);let k=0,p=1;
+ do{k++;p*=Math.random();}while(p>limit&&k<12);
+ return k-1;
+}
+function halfInning(){
+ const g=state.game;if(!g||g.finished)return;
+ const battingUser=g.half==="bottom";
+ const offense=battingUser?offenseRating():opponentRating();
+ const defense=battingUser?opponentRating():defenseRating();
+ const pitching=battingUser?opponentRating():pitchingRating();
+ const diff=offense-pitching;
+ const runChance=Math.max(.08,Math.min(.8,.30+diff/210));
+ let runs=0,outs=0,plays=[];
+ let bases=[false,false,false];
+ for(let pa=0;pa<18&&outs<3;pa++){
+  const roll=Math.random();
+  const defensePenalty=(100-defense)/450;
+  if(roll<.19+defensePenalty){
+   outs++;plays.push("A ball in play is turned into an out.");
+  }else if(roll<.35+defensePenalty){
+   bases[2]=bases[1];bases[1]=bases[0];bases[0]=true;
+   if(bases[2])runs++;
+   plays.push("A single puts a runner aboard.");
+  }else if(roll<.41){
+   if(bases[1])runs++;
+   if(bases[2])runs++;
+   bases=[true,bases[0],false];
+   plays.push("A double drives runners into scoring position.");
+  }else if(roll<.44){
+   runs+=bases.filter(Boolean).length+1;bases=[false,false,false];
+   plays.push("HOME RUN! The ball leaves the yard.");
+  }else if(roll<.53){
+   plays.push("The batter draws a walk.");
+   if(bases[0]&&bases[1]&&bases[2])runs++;
+   bases=[true,bases[0]||bases[1],bases[2]||bases[1]&&bases[0]];
+  }else{
+   outs++;plays.push("The pitcher gets a strikeout.");
+  }
+ }
+ if(battingUser)g.user+=runs;else g.opp+=runs;
+ const headline=plays.length?plays[plays.length-1]:"The inning ends.";
+ $("playByPlay").textContent=`${battingUser?"Your team":"The opponent"} score ${runs} run${runs===1?"":"s"}. ${headline}`;
+ plays.forEach(logPlay);
+ logPlay(`Half-inning complete: ${runs} run${runs===1?"":"s"}, ${outs} outs.`);
+ g.bases=[false,false,false];g.outs=0;
+ if(g.half==="top"){g.half="bottom";}
+ else{
+  g.half="top";g.inning++;
+ }
+ if(g.inning>9&&g.user!==g.opp){
+  if(g.half==="top"&&g.user>g.opp)finishGame();
+  else if(g.inning>9&&g.half==="top"&&g.user<g.opp)finishGame();
+ }
+ if(g.inning>18&&g.user===g.opp)finishGame();
+ updateGameUI();
+}
+function finishGame(){
+ const g=state.game;if(!g||g.finished)return;
+ g.finished=true;
+ $("simulateBtn").disabled=true;
+ const result=g.user>g.opp?"VICTORY! You beat baseball history.":g.user<g.opp?"DEFEAT. The championship team wins.":"TIE GAME. The game reached the extra-inning limit.";
+ $("finalBox").innerHTML=`<div class="final"><strong>${result}</strong><div>${g.user} – ${g.opp}</div></div>`;
+ $("playByPlay").textContent=result;
+ logPlay("Final score: your team "+g.user+", opponent "+g.opp+".");
+}
+function useBench(){
+ if(!state.game||state.game.finished){setStatus("Start a game first.");return;}
+ const bench=selectedPlayers().filter(p=>/^Bench/.test(p.slot)||/^Utility/.test(p.slot));
+ const available=bench.find(p=>!state.usedBench.includes(p.name));
+ if(!available){setStatus("All bench and utility selections have been used.");return;}
+ state.usedBench.push(available.name);
+ setStatus(`${available.name} is now available as a substitution. This version records the substitution but does not yet replace a specific batting-order slot.`);
+ logPlay("Bench substitution option used: "+available.name+".");
+}
+function bringReliever(){
+ if(!state.game||state.game.finished){setStatus("Start a game first.");return;}
+ const relievers=pitchingRoster().filter(p=>/Reliever|Closer/.test(p.slot));
+ const available=relievers.find(p=>!state.relieverUsed||p.slot!=="Closer");
+ if(!available){setStatus("No unused reliever is available.");return;}
+ state.relieverUsed=true;
+ state.game.currentReliever=available;
+ setStatus("Pitching change: "+available.name+".");
+ logPlay("Pitching change: "+available.name+" enters.");
+}
+$("fieldMode").onclick=()=>changeMode("field");
+$("pitchMode").onclick=()=>changeMode("pitch");
+$("backBtn").onclick=goBack;
+$("nextBtn").onclick=nextPick;
+$("simulateBtn").onclick=halfInning;
+$("benchBtn").onclick=useBench;
+$("relieverBtn").onclick=bringReliever;
+$("newOpponent").onclick=()=>{
+ state.opponent=randomOpponent(state.opponent?.name);
+ loadOpponentRoster();
+};
+$("retryRoster").onclick=loadOpponentRoster;
+
+function init(){
+ state.opponent=CHAMPIONS[Math.floor(Math.random()*CHAMPIONS.length)];
+ renderDraft();renderMyRoster();drawRadar();loadOpponentRoster();
+}
+init();
+</script>
+</body>
+</html>
