@@ -1,29 +1,542 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Beat the Greatest</title>
-<style>
-:root{--bg:#070b10;--panel:#0d131b;--panel2:#101923;--line:#253140;--muted:#778496;--text:#edf3f8;--green:#20d878;--blue:#3e8cff;--gold:#ffd166;--red:#ff5d73}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% -10%,#182536 0,#070b10 48%);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif}.app{width:min(760px,100%);margin:auto;padding:12px 10px 30px}.header{text-align:center;padding:10px 0 12px}.header h1{margin:0;font-size:24px;letter-spacing:2px}.header p{margin:5px 0 0;color:var(--muted);font-size:11px}.challenge,.panel,.game,.radar-panel{background:rgba(13,19,27,.94);border:1px solid var(--line);border-radius:17px;box-shadow:0 10px 30px #0005}.challenge{display:flex;justify-content:space-between;align-items:center;padding:11px 13px}.challenge-label,.eyebrow{font-size:8px;text-transform:uppercase;letter-spacing:1.4px;color:var(--muted)}.challenge-name{font-size:16px;font-weight:900;margin-top:3px}.team-logo{width:48px;height:48px;border-radius:12px;object-fit:contain;background:#fff;padding:5px}.radar-panel{margin-top:9px;padding:5px 8px 10px}.radar{width:100%;height:330px;display:block}.legend{display:flex;justify-content:center;gap:18px;color:var(--muted);font-size:9px}.legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:-1px}.legend .b{background:var(--blue)}.legend .g{border:1px dashed var(--green)}.mode{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:9px}.mode button,.action,.game-controls button{border:0;border-radius:10px;padding:10px;background:#17212d;color:#cbd4df;font-weight:900;font-size:9px}.mode .active{background:var(--green);color:#06120b}.panel{margin-top:9px;padding:10px}.panel-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}.panel-title strong{font-size:10px;letter-spacing:1px}.panel-title span{font-size:8px;color:var(--muted)}.opponent-roster{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;overflow:hidden}.mini{background:#101822;border:1px solid #263240;border-radius:10px;padding:5px;text-align:center;min-width:0}.mini img{width:36px;height:36px;border-radius:50%;object-fit:cover;background:#1a2430;border:1px solid #354253}.mini .n{font-size:7px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:3px}.mini .p{font-size:6px;color:var(--muted);margin-top:2px}.draft{margin-top:9px}.draft-head{display:flex;justify-content:space-between;align-items:end;margin-bottom:8px}.draft-head h2{font-size:18px;margin:3px 0 0}.progress{font-size:10px;color:var(--green);font-weight:900}.cards{display:grid;grid-template-columns:1fr 1fr;gap:8px}.card{display:flex;align-items:center;gap:8px;min-height:78px;padding:8px;background:#101822;border:1px solid #293544;border-radius:14px;cursor:pointer}.card.selected{border-color:var(--green);background:#102318}.card img{width:48px;height:48px;min-width:48px;border-radius:50%;object-fit:cover;background:#18222d;border:1px solid #3a4758}.card .name{font-size:11px;font-weight:900;line-height:1.1}.card .meta{font-size:8px;color:var(--muted);margin-top:4px}.card .stats{font-size:8px;color:#66a8ff;margin-top:3px}.check{margin-left:auto;color:var(--green);font-weight:900}.controls{display:flex;gap:7px;margin-top:8px}.back{width:28%}.next{flex:1;background:var(--green)!important;color:#06120b!important}.roster-scroll{display:flex;gap:6px;overflow-x:auto}.chip{min-width:75px;padding:6px;background:#101822;border:1px solid #263240;border-radius:9px;text-align:center}.chip img{width:27px;height:27px;border-radius:50%;object-fit:cover}.chip .pos{font-size:7px;color:var(--muted)}.chip .nm{font-size:8px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.game{margin-top:10px;padding:13px}.inning{text-align:center;color:var(--green);font-size:10px;font-weight:900;letter-spacing:1.4px}.scoreboard{display:grid;grid-template-columns:1fr 45px 1fr;text-align:center;align-items:center;margin:10px 0}.team{font-size:8px;color:var(--muted)}.score{font-size:30px;font-weight:900;margin-top:2px}.play{min-height:82px;background:#111923;border:1px solid #263240;border-radius:12px;padding:11px;font-size:11px;line-height:1.45}.game-controls{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px}.simulate{grid-column:1/-1;background:var(--green)!important;color:#06120b!important}.hidden{display:none!important}.final{margin-top:10px;padding:12px;border:1px solid var(--gold);border-radius:12px;background:#201a0c;text-align:center;color:#ffe9a6}.log{margin-top:8px;max-height:170px;overflow:auto;border-top:1px solid #253140;padding-top:6px;color:#9ca9b8;font-size:9px}.log div{padding:3px 0;border-bottom:1px solid #18212c}@media(max-width:500px){.cards{grid-template-columns:1fr}.radar{height:310px}.opponent-roster{grid-template-columns:repeat(5,76px);overflow-x:auto}}
-.game-action{margin-top:10px;background:#05090d;border:2px solid #344555;border-radius:12px;overflow:hidden;box-shadow:inset 0 0 0 1px #111a22,0 8px 20px #0007;font-family:monospace}.action-top{display:flex;align-items:center;justify-content:space-between;padding:6px 8px;background:#0b1219;border-bottom:1px solid #25313d;color:#7dffb2;font-size:8px;font-weight:900;letter-spacing:1px}.sound-btn{border:1px solid #344555;background:#121c26;border-radius:6px;padding:4px 7px;color:#fff;font-size:11px;cursor:pointer}.action-stage{position:relative;background:#071018}.action-canvas{display:block;width:100%;height:154px;image-rendering:pixelated;image-rendering:crisp-edges}.action-teams{position:absolute;left:7px;right:7px;top:7px;display:flex;justify-content:space-between;pointer-events:none}.action-team{display:flex;align-items:center;gap:5px;background:#05090dcc;border:1px solid #344555;border-radius:7px;padding:3px 5px;max-width:43%}.action-team img{width:25px;height:25px;object-fit:contain;background:#fff;border-radius:4px;padding:2px}.action-team.user img{background:#172536}.action-team span{font-size:7px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.action-matchup{display:grid;grid-template-columns:1fr 32px 1fr;align-items:center;gap:5px;padding:6px 8px;background:#091119;border-top:1px solid #25313d}.action-player{display:flex;align-items:center;gap:6px;min-width:0}.action-player.right{justify-content:flex-end;text-align:right}.action-player img{width:34px;height:34px;border-radius:50%;object-fit:cover;background:#172330;border:1px solid #3b4c5d}.action-player strong{display:block;font-size:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.action-player small{display:block;color:#718093;font-size:6px;margin-top:2px}.action-vs{text-align:center;color:#526276;font-size:7px;font-weight:900}.action-caption{text-align:center;padding:6px 8px;color:#ffd166;background:#070d13;font-size:9px;font-weight:900;letter-spacing:1px;border-top:1px solid #25313d}.game-action.flash{animation:actionFlash .22s steps(2,end)}@keyframes actionFlash{50%{filter:brightness(1.8)}}
-</style>
-</head>
-<body><div class="app">
-<div class="header"><h1>BEAT THE GREATEST</h1><p>Build a team. Beat baseball history.</p></div>
-<div class="challenge"><div><div class="challenge-label">Random championship opponent</div><div class="challenge-name" id="opponentName">Loading...</div><div class="eyebrow" id="opponentSeason"></div></div><img id="opponentLogo" class="team-logo" alt=""></div>
-<div class="radar-panel"><svg id="radar" class="radar" viewBox="0 0 400 360"></svg><div class="legend"><span><i class="b"></i>Championship Team</span><span><i class="g"></i>Your Team</span></div></div>
-<div class="mode"><button id="fieldMode" class="active" onclick="changeMode('field')">FIELDERS</button><button id="pitchMode" onclick="changeMode('pitch')">PITCHERS</button></div>
-<div class="panel"><div class="panel-title"><strong>CHAMPIONSHIP ROSTER</strong><span id="oppCount"></span></div><div id="opponentRoster" class="opponent-roster"></div></div>
-<div id="draftArea" class="draft"><div class="draft-head"><div><div class="eyebrow">Your draft</div><h2 id="draftTitle">Choose Your Catcher</h2></div><div class="progress" id="progress">0 / 27</div></div><div id="cards" class="cards"></div><div class="controls"><button class="action back" onclick="goBack()">BACK</button><button class="action next" onclick="nextPick()">NEXT</button></div></div>
-<div class="panel"><div class="panel-title"><strong>YOUR ROSTER</strong><span id="myRosterCount">0 / 27</span></div><div id="myRoster" class="roster-scroll"></div></div>
-<div id="game" class="game hidden"><div id="inningDisplay" class="inning">TOP 1ST</div><div id="gameAction" class="game-action">
-<div class="action-top"><span id="actionInning">TOP 1ST • FIRST PITCH</span><button id="soundBtn" class="sound-btn" onclick="toggleSound()">🔊</button></div>
-<div class="action-stage"><canvas id="actionCanvas" class="action-canvas" width="160" height="82"></canvas>
-<div class="action-teams"><div class="action-team user"><img id="actionUserLogo" alt=""><span>BTG</span></div><div class="action-team"><span id="actionOppMark">OPP</span><img id="actionOppLogo" alt=""></div></div></div>
-<div class="action-matchup"><div class="action-player"><img id="actionPitcherFace" alt=""><div><strong id="actionPitcherName">Pitcher</strong><small id="actionPitcherRole">PITCHER</small></div></div><div class="action-vs">VS</div><div class="action-player right"><div><strong id="actionBatterName">Batter</strong><small id="actionBatterRole">BATTER</small></div><img id="actionBatterFace" alt=""></div></div>
-<div id="actionCaption" class="action-caption">FIRST PITCH</div>
-</div><div class="scoreboard"><div><div class="team">YOUR TEAM</div><div id="userScore" class="score">0</div></div><div>—</div><div><div class="team" id="gameOpponentLabel">OPPONENT</div><div id="oppScore" class="score">0</div></div></div><div id="playByPlay" class="play">First pitch coming up.</div><div class="game-controls"><button class="simulate" id="simulateBtn" onclick="simulateHalfInning()">SIMULATE HALF-INNING</button><button onclick="bringInReliever()">BRING IN RELIEVER</button><button onclick="useBenchPlayer()">USE BENCH</button></div><div id="gameLog" class="log"></div><div id="finalBox"></div></div>
-</div>
-<script>
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/>
+  <title>
+   Beat the Greatest
+  </title>
+  <style>
+      :root {
+     --bg:#070b10;
+     --panel:#0d131b;
+     --panel2:#101923;
+     --line:#253140;
+     --muted:#778496;
+     --text:#edf3f8;
+     --green:#20d878;
+     --blue:#3e8cff;
+     --gold:#ffd166;
+     --red:#ff5d73
+   }
+   * {
+     box-sizing:border-box
+   }
+   body {
+     margin:0;
+     background:radial-gradient(circle at 50% -10%,#182536 0,#070b10 48%);
+     color:var(--text);
+     font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif
+   }
+   .app {
+     width:min(760px,100%);
+     margin:auto;
+     padding:12px 10px 30px
+   }
+   .header {
+     text-align:center;
+     padding:10px 0 12px
+   }
+   .header h1 {
+     margin:0;
+     font-size:24px;
+     letter-spacing:2px
+   }
+   .header p {
+     margin:5px 0 0;
+     color:var(--muted);
+     font-size:11px
+   }
+   .challenge,.panel,.game,.radar-panel {
+     background:rgba(13,19,27,.94);
+     border:1px solid var(--line);
+     border-radius:17px;
+     box-shadow:0 10px 30px #0005
+   }
+   .challenge {
+     display:flex;
+     justify-content:space-between;
+     align-items:center;
+     padding:11px 13px
+   }
+   .challenge-label,.eyebrow {
+     font-size:8px;
+     text-transform:uppercase;
+     letter-spacing:1.4px;
+     color:var(--muted)
+   }
+   .challenge-name {
+     font-size:16px;
+     font-weight:900;
+     margin-top:3px
+   }
+   .team-logo {
+     width:48px;
+     height:48px;
+     border-radius:12px;
+     object-fit:contain;
+     background:#fff;
+     padding:5px
+   }
+   .radar-panel {
+     margin-top:9px;
+     padding:5px 8px 10px
+   }
+   .radar {
+     width:100%;
+     height:330px;
+     display:block
+   }
+   .legend {
+     display:flex;
+     justify-content:center;
+     gap:18px;
+     color:var(--muted);
+     font-size:9px
+   }
+   .legend i {
+     display:inline-block;
+     width:9px;
+     height:9px;
+     border-radius:2px;
+     margin-right:5px;
+     vertical-align:-1px
+   }
+   .legend .b {
+     background:var(--blue)
+   }
+   .legend .g {
+     border:1px dashed var(--green)
+   }
+   .mode {
+     display:grid;
+     grid-template-columns:1fr 1fr;
+     gap:7px;
+     margin-top:9px
+   }
+   .mode button,.action,.game-controls button {
+     border:0;
+     border-radius:10px;
+     padding:10px;
+     background:#17212d;
+     color:#cbd4df;
+     font-weight:900;
+     font-size:9px
+   }
+   .mode .active {
+     background:var(--green);
+     color:#06120b
+   }
+   .panel {
+     margin-top:9px;
+     padding:10px
+   }
+   .panel-title {
+     display:flex;
+     justify-content:space-between;
+     align-items:center;
+     margin-bottom:8px
+   }
+   .panel-title strong {
+     font-size:10px;
+     letter-spacing:1px
+   }
+   .panel-title span {
+     font-size:8px;
+     color:var(--muted)
+   }
+   .opponent-roster {
+     display:grid;
+     grid-template-columns:repeat(5,1fr);
+     gap:6px;
+     overflow:hidden
+   }
+   .mini {
+     background:#101822;
+     border:1px solid #263240;
+     border-radius:10px;
+     padding:5px;
+     text-align:center;
+     min-width:0
+   }
+   .mini img {
+     width:36px;
+     height:36px;
+     border-radius:50%;
+     object-fit:cover;
+     background:#1a2430;
+     border:1px solid #354253
+   }
+   .mini .n {
+     font-size:7px;
+     font-weight:900;
+     white-space:nowrap;
+     overflow:hidden;
+     text-overflow:ellipsis;
+     margin-top:3px
+   }
+   .mini .p {
+     font-size:6px;
+     color:var(--muted);
+     margin-top:2px
+   }
+   .draft {
+     margin-top:9px
+   }
+   .draft-head {
+     display:flex;
+     justify-content:space-between;
+     align-items:end;
+     margin-bottom:8px
+   }
+   .draft-head h2 {
+     font-size:18px;
+     margin:3px 0 0
+   }
+   .progress {
+     font-size:10px;
+     color:var(--green);
+     font-weight:900
+   }
+   .cards {
+     display:grid;
+     grid-template-columns:1fr 1fr;
+     gap:8px
+   }
+   .card {
+     display:flex;
+     align-items:center;
+     gap:8px;
+     min-height:78px;
+     padding:8px;
+     background:#101822;
+     border:1px solid #293544;
+     border-radius:14px;
+     cursor:pointer
+   }
+   .card.selected {
+     border-color:var(--green);
+     background:#102318
+   }
+   .card img {
+     width:48px;
+     height:48px;
+     min-width:48px;
+     border-radius:50%;
+     object-fit:cover;
+     background:#18222d;
+     border:1px solid #3a4758
+   }
+   .card .name {
+     font-size:11px;
+     font-weight:900;
+     line-height:1.1
+   }
+   .card .meta {
+     font-size:8px;
+     color:var(--muted);
+     margin-top:4px
+   }
+   .card .stats {
+     font-size:8px;
+     color:#66a8ff;
+     margin-top:3px
+   }
+   .check {
+     margin-left:auto;
+     color:var(--green);
+     font-weight:900
+   }
+   .controls {
+     display:flex;
+     gap:7px;
+     margin-top:8px
+   }
+   .back {
+     width:28%
+   }
+   .next {
+     flex:1;
+     background:var(--green)!important;
+     color:#06120b!important
+   }
+   .roster-scroll {
+     display:flex;
+     gap:6px;
+     overflow-x:auto
+   }
+   .chip {
+     min-width:75px;
+     padding:6px;
+     background:#101822;
+     border:1px solid #263240;
+     border-radius:9px;
+     text-align:center
+   }
+   .chip img {
+     width:27px;
+     height:27px;
+     border-radius:50%;
+     object-fit:cover
+   }
+   .chip .pos {
+     font-size:7px;
+     color:var(--muted)
+   }
+   .chip .nm {
+     font-size:8px;
+     font-weight:900;
+     white-space:nowrap;
+     overflow:hidden;
+     text-overflow:ellipsis
+   }
+   .game {
+     margin-top:10px;
+     padding:13px
+   }
+   .inning {
+     text-align:center;
+     color:var(--green);
+     font-size:10px;
+     font-weight:900;
+     letter-spacing:1.4px
+   }
+   .scoreboard {
+     display:grid;
+     grid-template-columns:1fr 45px 1fr;
+     text-align:center;
+     align-items:center;
+     margin:10px 0
+   }
+   .team {
+     font-size:8px;
+     color:var(--muted)
+   }
+   .score {
+     font-size:30px;
+     font-weight:900;
+     margin-top:2px
+   }
+   .play {
+     min-height:82px;
+     background:#111923;
+     border:1px solid #263240;
+     border-radius:12px;
+     padding:11px;
+     font-size:11px;
+     line-height:1.45
+   }
+   .game-controls {
+     display:grid;
+     grid-template-columns:1fr 1fr;
+     gap:7px;
+     margin-top:8px
+   }
+   .simulate {
+     grid-column:1/-1;
+     background:var(--green)!important;
+     color:#06120b!important
+   }
+   .hidden {
+     display:none!important
+   }
+   .final {
+     margin-top:10px;
+     padding:12px;
+     border:1px solid var(--gold);
+     border-radius:12px;
+     background:#201a0c;
+     text-align:center;
+     color:#ffe9a6
+   }
+   .log {
+     margin-top:8px;
+     max-height:170px;
+     overflow:auto;
+     border-top:1px solid #253140;
+     padding-top:6px;
+     color:#9ca9b8;
+     font-size:9px
+   }
+   .log div {
+     padding:3px 0;
+     border-bottom:1px solid #18212c
+   }
+   @media(max-width:500px) {
+     .cards {
+       grid-template-columns:1fr
+     }
+     .radar {
+       height:310px
+     }
+     .opponent-roster {
+       grid-template-columns:repeat(5,76px);
+       overflow-x:auto
+     }
+   }
+   .game-action {
+     margin-top:10px;
+     background:#05090d;
+     border:2px solid #344555;
+     border-radius:12px;
+     overflow:hidden;
+     box-shadow:inset 0 0 0 1px #111a22,0 8px 20px #0007;
+     font-family:monospace
+   }
+   .action-top {
+     display:flex;
+     align-items:center;
+     justify-content:space-between;
+     padding:6px 8px;
+     background:#0b1219;
+     border-bottom:1px solid #25313d;
+     color:#7dffb2;
+     font-size:8px;
+     font-weight:900;
+     letter-spacing:1px
+   }
+   .sound-btn {
+     border:1px solid #344555;
+     background:#121c26;
+     border-radius:6px;
+     padding:4px 7px;
+     color:#fff;
+     font-size:11px;
+     cursor:pointer
+   }
+   .action-stage {
+     position:relative;
+     background:#071018
+   }
+   .action-canvas {
+     display:block;
+     width:100%;
+     height:154px;
+     image-rendering:pixelated;
+     image-rendering:crisp-edges
+   }
+   .action-teams {
+     position:absolute;
+     left:7px;
+     right:7px;
+     top:7px;
+     display:flex;
+     justify-content:space-between;
+     pointer-events:none
+   }
+   .action-team {
+     display:flex;
+     align-items:center;
+     gap:5px;
+     background:#05090dcc;
+     border:1px solid #344555;
+     border-radius:7px;
+     padding:3px 5px;
+     max-width:43%
+   }
+   .action-team img {
+     width:25px;
+     height:25px;
+     object-fit:contain;
+     background:#fff;
+     border-radius:4px;
+     padding:2px
+   }
+   .action-team.user img {
+     background:#172536
+   }
+   .action-team span {
+     font-size:7px;
+     font-weight:900;
+     white-space:nowrap;
+     overflow:hidden;
+     text-overflow:ellipsis
+   }
+   .action-matchup {
+     display:grid;
+     grid-template-columns:1fr 32px 1fr;
+     align-items:center;
+     gap:5px;
+     padding:6px 8px;
+     background:#091119;
+     border-top:1px solid #25313d
+   }
+   .action-player {
+     display:flex;
+     align-items:center;
+     gap:6px;
+     min-width:0
+   }
+   .action-player.right {
+     justify-content:flex-end;
+     text-align:right
+   }
+   .action-player img {
+     width:34px;
+     height:34px;
+     border-radius:50%;
+     object-fit:cover;
+     background:#172330;
+     border:1px solid #3b4c5d
+   }
+   .action-player strong {
+     display:block;
+     font-size:8px;
+     white-space:nowrap;
+     overflow:hidden;
+     text-overflow:ellipsis
+   }
+   .action-player small {
+     display:block;
+     color:#718093;
+     font-size:6px;
+     margin-top:2px
+   }
+   .action-vs {
+     text-align:center;
+     color:#526276;
+     font-size:7px;
+     font-weight:900
+   }
+   .action-caption {
+     text-align:center;
+     padding:6px 8px;
+     color:#ffd166;
+     background:#070d13;
+     font-size:9px;
+     font-weight:900;
+     letter-spacing:1px;
+     border-top:1px solid #25313d
+   }
+   .game-action.flash {
+     animation:actionFlash .22s steps(2,end)
+   }
+   @keyframes actionFlash {
+     50% {
+       filter:brightness(1.8)
+     }
+   }
+  </style>
+ </head>
+ <body>
+  <div class="app">
+   <div class="header">
+    <h1>
+     BEAT THE GREATEST
+    </h1>
+    <p>
+     Build a team. Beat baseball history.
+    </p>
+   </div>
+   <div class="challenge">
+    <div>
+     <div class="challenge-label">
+      Random championship opponent
+     </div>
+     <div class="challenge-name" id="opponentName">
+      Loading...
+     </div>
+     <div class="eyebrow" id="opponentSeason">
+     </div>
+    </div>
+    <img alt=""
